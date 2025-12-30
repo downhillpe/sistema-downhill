@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADM - Gestão Financeira</title>
+    <title>ADM - Gestão & Ranking</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="manifest" href="manifest.json">
@@ -11,129 +11,154 @@
     <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}</script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: #f0f2f5; color: #333; padding-bottom: 80px; }
+        body { background: #f4f4f4; color: #333; padding-bottom: 50px; }
 
-        /* NAV SUPERIOR */
+        /* NAV E ABAS */
         .admin-nav { background: #001233; color: white; padding: 15px 20px; border-bottom: 4px solid #ffcc00; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
-        
-        /* ABAS DE NAVEGAÇÃO */
         .tabs { display: flex; background: white; padding: 10px; gap: 10px; justify-content: center; box-shadow: 0 5px 10px rgba(0,0,0,0.05); }
-        .tab-btn { padding: 10px 20px; border: none; background: #eee; border-radius: 20px; font-weight: bold; color: #666; cursor: pointer; flex: 1; max-width: 200px; }
+        .tab-btn { padding: 12px 25px; border: none; background: #eee; border-radius: 20px; font-weight: bold; color: #666; cursor: pointer; flex: 1; max-width: 200px; font-size: 13px; }
         .tab-btn.active { background: #003399; color: white; }
 
-        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
+        .painel-section { display: none; }
+        .painel-section.active { display: block; }
 
-        /* SEÇÃO GESTÃO (NOVA) */
-        .filtro-etapa { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .filtro-etapa label { font-size: 12px; font-weight: 800; color: #003399; text-transform: uppercase; }
-        select { width: 100%; padding: 12px; border-radius: 10px; border: 2px solid #ddd; margin-top: 5px; font-weight: bold; font-size: 16px; }
-
+        /* --- ESTILOS DA ABA GESTÃO (FINANCEIRO) --- */
+        .filtro-etapa { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
         .cards-resumo { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .kpi-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 4px solid #ddd; }
+        .kpi-card { background: white; padding: 20px; border-radius: 15px; text-align: center; border-top: 4px solid #ddd; }
         .kpi-card.money { border-top-color: #27ae60; }
         .kpi-card.users { border-top-color: #003399; }
         .kpi-valor { font-size: 24px; font-weight: 900; color: #333; display: block; margin-top: 5px; }
-        .kpi-label { font-size: 11px; text-transform: uppercase; color: #888; font-weight: bold; }
-
-        .lista-inscritos { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .kpi-label { font-size: 10px; text-transform: uppercase; color: #888; font-weight: bold; }
+        .lista-inscritos { background: white; border-radius: 15px; overflow: hidden; }
         .piloto-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #f0f0f0; }
-        .piloto-row:last-child { border-bottom: none; }
-        .piloto-info h4 { font-size: 14px; color: #003399; margin-bottom: 2px; }
-        .piloto-info span { font-size: 11px; color: #666; background: #eee; padding: 2px 6px; border-radius: 4px; }
-        .piloto-status { text-align: right; }
-        .status-badge { font-size: 10px; padding: 4px 8px; border-radius: 6px; font-weight: bold; text-transform: uppercase; }
+        .status-badge { font-size: 10px; padding: 4px 8px; border-radius: 6px; font-weight: bold; }
         .pago { background: #d4edda; color: #155724; }
         .pendente { background: #fff3cd; color: #856404; }
 
-        /* SEÇÃO RANKING (ANTIGA) */
-        .controls-card { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
-        .preview-area { background: #000a1a; padding: 20px; border-radius: 15px; overflow: hidden; min-height: 400px; display: flex; justify-content: center; }
-        #area-print { width: 1080px; height: 1920px; background: #001233; border: 15px solid #ffcc00; padding: 60px; transform: scale(0.25); transform-origin: top center; margin-bottom: -1300px; display: flex; flex-direction: column; }
+        /* --- ESTILOS DA ABA RANKING (CARD) --- */
+        .ranking-layout { display: flex; flex-direction: column; gap: 20px; }
+        .controls-card { background: white; padding: 20px; border-radius: 15px; }
+        select { width: 100%; padding: 15px; border-radius: 10px; border: 2px solid #003399; font-weight: bold; font-size: 16px; background: #f9fbfd; margin-bottom: 10px; }
         
-        /* ESTILOS DE IMPRESSÃO DO RANKING */
-        .header-print { text-align: center; margin-bottom: 40px; }
-        .header-print h1 { font-size: 140px; color: white; font-weight: 900; line-height: 0.9; }
-        .header-print p { font-size: 45px; color: #ffcc00; font-weight: 700; letter-spacing: 10px; }
-        .cat-faixa { background: #ffcc00; color: #001233; font-size: 50px; font-weight: 900; text-align: center; padding: 20px; margin: 20px 0 40px 0; border-radius: 10px; text-transform: uppercase; }
-        .linha { display: flex; align-items: center; background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; border-left: 12px solid #ffcc00; margin-bottom: 15px; }
-        .pos { font-size: 60px; font-weight: 900; color: #ffcc00; width: 130px; }
-        .atleta { flex: 1; }
-        .atleta .n { font-size: 48px; font-weight: 800; color: white; display: block; text-transform: uppercase; }
-        .atleta .e { font-size: 30px; color: #aaa; text-transform: uppercase; }
-        .tempo { font-size: 55px; font-weight: 900; color: #27ae60; font-family: monospace; }
-        .footer-print { margin-top: auto; text-align: center; border-top: 3px solid rgba(255,255,255,0.1); padding-top: 40px; }
-        .footer-print b { font-size: 45px; color: #ffcc00; display: block; }
-        .footer-print span { font-size: 38px; color: white; display: inline-block; margin-top: 15px; }
+        .preview-wrapper {
+            background: #222; padding: 20px; border-radius: 20px; 
+            display: flex; justify-content: center; align-items: flex-start;
+            overflow: hidden; height: 600px; /* Altura da janela de preview */
+            position: relative;
+        }
 
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; color: white; text-transform: uppercase; }
-        .btn-green { background: #27ae60; }
+        /* O CARD MÁGICO (1080x1920) */
+        #area-print {
+            width: 1080px; height: 1920px;
+            background: #001233;
+            border: 20px solid #ffcc00;
+            display: flex; flex-direction: column;
+            padding: 80px 60px;
+            box-sizing: border-box;
+            
+            /* Escala para caber na tela do celular do admin */
+            transform: scale(0.28); 
+            transform-origin: top center;
+            position: absolute; top: 20px;
+        }
+
+        .header-print { text-align: center; margin-bottom: 60px; }
+        .header-print p { font-size: 50px; color: #ffcc00; font-weight: 700; letter-spacing: 15px; margin-bottom: 10px; }
+        .header-print h1 { font-size: 180px; color: white; font-weight: 900; line-height: 0.8; margin: 0; }
         
-        /* CONTROLE DE VISIBILIDADE */
-        .painel-section { display: none; }
-        .painel-section.active { display: block; }
+        .cat-faixa { 
+            background: #ffcc00; color: #001233; font-size: 60px; font-weight: 900; 
+            text-align: center; padding: 30px; margin-bottom: 60px; border-radius: 20px; text-transform: uppercase; 
+        }
+
+        .lista-rank { flex: 1; display: flex; flex-direction: column; gap: 25px; }
+        
+        .linha-rank { 
+            display: flex; align-items: center; 
+            background: rgba(255,255,255,0.05); 
+            padding: 30px 40px; border-radius: 20px; 
+            border-left: 15px solid #ffcc00; 
+        }
+        
+        .pos { font-size: 80px; font-weight: 900; color: #ffcc00; width: 140px; }
+        .info { flex: 1; }
+        .info .nome { display: block; font-size: 55px; font-weight: 800; color: white; text-transform: uppercase; line-height: 1.1; }
+        .info .equipe { font-size: 35px; color: #aaa; text-transform: uppercase; }
+        .tempo { font-size: 60px; font-weight: 900; color: #27ae60; font-family: monospace; }
+
+        .footer-print { margin-top: auto; text-align: center; padding-top: 50px; border-top: 4px solid rgba(255,255,255,0.1); }
+        .footer-print h2 { font-size: 50px; color: #ffcc00; margin-bottom: 20px; }
+        .footer-print span { font-size: 40px; color: white; }
+
+        .btn { width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer; color: white; text-transform: uppercase; font-size: 14px; margin-top: 10px; }
+        .btn-green { background: #27ae60; }
+        .btn-gray { background: #555; }
     </style>
 </head>
 <body>
 
     <div class="admin-nav">
-        <span><i class="fas fa-chart-line"></i> PAINEL ADM</span>
-        <button onclick="window.location.href='index.html'" style="background:none; border:none; color:white; cursor:pointer;"><i class="fas fa-sign-out-alt"></i> SAIR</button>
+        <span><i class="fas fa-user-shield"></i> PAINEL ADM</span>
+        <button onclick="window.location.href='index.html'" style="background:none; border:none; color:white;"><i class="fas fa-sign-out-alt"></i></button>
     </div>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="mudarAba('gestao')">GESTÃO & CAIXA</button>
-        <button class="tab-btn" onclick="mudarAba('ranking')">GERAR RANKING</button>
+        <button class="tab-btn active" onclick="mudarAba('gestao', this)">GESTÃO & CAIXA</button>
+        <button class="tab-btn" onclick="mudarAba('ranking', this)">GERAR RANKING</button>
     </div>
 
     <div class="container">
 
         <div id="sec-gestao" class="painel-section active">
-            
             <div class="filtro-etapa">
-                <label>Selecione a Etapa para ver o Caixa:</label>
-                <select id="select-etapa-gestao" onchange="carregarDadosFinanceiros()">
-                    <option value="todos">-- VISÃO GERAL (TODAS) --</option>
+                <label>Filtrar Etapa:</label>
+                <select id="select-etapa" onchange="carregarFinanceiro()">
+                    <option value="todos">TODAS AS ETAPAS</option>
                     <option value="ouricuri">1ª ETAPA - OURICURI</option>
                     <option value="caruaru">2ª ETAPA - CARUARU</option>
-                    <option value="santacruz">3ª ETAPA - SANTA CRUZ</option>
                 </select>
             </div>
-
             <div class="cards-resumo">
-                <div class="kpi-card users">
-                    <span class="kpi-label">Total Inscritos</span>
-                    <span class="kpi-valor" id="total-inscritos">0</span>
-                </div>
-                <div class="kpi-card money">
-                    <span class="kpi-label">Arrecadado (R$)</span>
-                    <span class="kpi-valor" id="total-valor">R$ 0,00</span>
-                </div>
+                <div class="kpi-card users"><span class="kpi-label">Inscritos</span><span class="kpi-valor" id="kpi-users">0</span></div>
+                <div class="kpi-card money"><span class="kpi-label">Caixa (R$)</span><span class="kpi-valor" id="kpi-money">R$ 0,00</span></div>
             </div>
-
-            <h3 style="margin-bottom: 10px; font-size: 14px; color: #666; text-transform: uppercase;">Histórico de Inscrições</h3>
-            <div class="lista-inscritos" id="lista-inscritos">
-                </div>
+            <div class="lista-inscritos" id="lista-financeira"></div>
         </div>
 
         <div id="sec-ranking" class="painel-section">
-            <div class="controls-card">
-                <label style="font-size:12px; font-weight:bold; color:#003399;">CATEGORIA:</label>
-                <select id="cat-select" onchange="atualizarRankingCard()">
-                    <option value="">-- SELECIONE --</option>
-                    <option value="ELITE">ELITE</option>
-                    <option value="MASTER A">MASTER A</option>
-                    <option value="MASTER B">MASTER B</option>
-                    <option value="RÍGIDA">RÍGIDA</option>
-                </select>
-                <button class="btn btn-green" onclick="baixarImagem()">BAIXAR IMAGEM</button>
-            </div>
+            <div class="ranking-layout">
+                <div class="controls-card">
+                    <label style="color:#003399; font-weight:bold;">CATEGORIA DO PODIUM:</label>
+                    <select id="cat-select" onchange="atualizarRanking()">
+                        <option value="">-- SELECIONE --</option>
+                        <option value="ELITE">ELITE (Livre)</option>
+                        <option value="MASTER A">MASTER A (30-39)</option>
+                        <option value="MASTER B">MASTER B (40-49)</option>
+                        <option value="RÍGIDA">RÍGIDA (Livre)</option>
+                    </select>
+                    <button class="btn btn-green" onclick="baixarImagem()"><i class="fas fa-download"></i> Baixar Imagem</button>
+                    <button class="btn btn-gray" onclick="window.location.href='dashboard.html'">Voltar ao Menu</button>
+                </div>
 
-            <div class="preview-area">
-                <div id="area-print">
-                    <div class="header-print"><p>RANKING 2026</p><h1>DH PE</h1></div>
-                    <div class="cat-faixa" id="print-cat">SELECIONE</div>
-                    <div id="ranking-lista-print"></div>
-                    <div class="footer-print"><b>DOWNHILL PERNAMBUCANO</b><span>@Downhill_Pernambuco</span></div>
+                <div class="preview-wrapper">
+                    <div id="area-print">
+                        <div class="header-print">
+                            <p>RANKING 2026</p>
+                            <h1>DH PE</h1>
+                        </div>
+                        
+                        <div class="cat-faixa" id="print-cat">SELECIONE</div>
+                        
+                        <div class="lista-rank" id="lista-rank-container">
+                            </div>
+
+                        <div class="footer-print">
+                            <h2>DOWNHILL PERNAMBUCANO</h2>
+                            <span><i class="fab fa-instagram"></i> @Downhill_Pernambuco</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -141,94 +166,97 @@
     </div>
 
     <script>
-        // --- 1. LÓGICA DAS ABAS ---
-        function mudarAba(aba) {
-            document.querySelectorAll('.painel-section').forEach(s => s.classList.remove('active'));
+        // --- LÓGICA DE ABAS ---
+        function mudarAba(id, btn) {
+            document.querySelectorAll('.painel-section').forEach(d => d.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            
-            document.getElementById('sec-' + aba).classList.add('active');
-            event.target.classList.add('active');
+            document.getElementById('sec-' + id).classList.add('active');
+            btn.classList.add('active');
         }
 
-        // --- 2. DADOS SIMULADOS (MOCK) ---
-        // Como não temos Banco de Dados Online, criei esses dados para você ver o painel funcionando.
-        const bancoDadosInscricoes = [
+        // --- DADOS SIMULADOS (MOCK) ---
+        const inscricoes = [
             { nome: "Bruno Rocha", cat: "Elite", valor: 120, status: "pago", etapa: "ouricuri" },
             { nome: "Carlos Eduardo", cat: "Master A", valor: 120, status: "pago", etapa: "ouricuri" },
             { nome: "Felipe Góes", cat: "Rígida", valor: 120, status: "pendente", etapa: "ouricuri" },
-            { nome: "Diego Santos", cat: "Elite", valor: 120, status: "pago", etapa: "caruaru" },
-            { nome: "Lucas Silva", cat: "Sub-30", valor: 120, status: "pendente", etapa: "caruaru" },
-            { nome: "Ana Paula", cat: "Feminino", valor: 100, status: "pago", etapa: "ouricuri" }
+            { nome: "Diego Santos", cat: "Elite", valor: 120, status: "pago", etapa: "caruaru" }
         ];
 
-        // --- 3. LÓGICA FINANCEIRA ---
-        function carregarDadosFinanceiros() {
-            const filtro = document.getElementById('select-etapa-gestao').value;
-            const listaEl = document.getElementById('lista-inscritos');
-            listaEl.innerHTML = ""; // Limpa lista
+        // --- LÓGICA FINANCEIRA ---
+        function carregarFinanceiro() {
+            const filtro = document.getElementById('select-etapa').value;
+            const lista = document.getElementById('lista-financeira');
+            lista.innerHTML = "";
+            let total = 0, users = 0;
 
-            let totalDinheiro = 0;
-            let totalPessoas = 0;
+            const filtrados = inscricoes.filter(i => filtro === 'todos' ? true : i.etapa === filtro);
 
-            // Filtra os dados
-            const dadosFiltrados = bancoDadosInscricoes.filter(item => {
-                return filtro === "todos" ? true : item.etapa === filtro;
-            });
-
-            // Gera a lista na tela
-            dadosFiltrados.forEach(atleta => {
-                totalPessoas++;
-                if(atleta.status === 'pago') totalDinheiro += atleta.valor;
-
-                const statusClass = atleta.status === 'pago' ? 'pago' : 'pendente';
-                const statusTexto = atleta.status === 'pago' ? 'PAGO' : 'AGUARDANDO';
-
-                listaEl.innerHTML += `
+            filtrados.forEach(i => {
+                users++;
+                if(i.status === 'pago') total += i.valor;
+                lista.innerHTML += `
                     <div class="piloto-row">
-                        <div class="piloto-info">
-                            <h4>${atleta.nome}</h4>
-                            <span>${atleta.cat}</span> <span style="background:#fff3cd; border:1px solid #ffeeba;">R$ ${atleta.valor},00</span>
-                        </div>
-                        <div class="piloto-status">
-                            <span class="status-badge ${statusClass}">${statusTexto}</span>
-                        </div>
+                        <div><strong style="color:#003399;">${i.nome}</strong><br><span style="font-size:11px; color:#666;">${i.cat}</span></div>
+                        <span class="status-badge ${i.status}">${i.status.toUpperCase()}</span>
                     </div>
                 `;
             });
-
-            // Atualiza os cartões de resumo
-            document.getElementById('total-inscritos').innerText = totalPessoas;
-            document.getElementById('total-valor').innerText = totalDinheiro.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            document.getElementById('kpi-users').innerText = users;
+            document.getElementById('kpi-money').innerText = total.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
         }
 
-        // --- 4. LÓGICA DO RANKING (Existente) ---
-        const listaRankingExemplo = [
+        // --- LÓGICA RANKING ---
+        const dadosRanking = [
             { p: "1º", n: "Bruno Rocha", e: "Sertão DH", t: "2:45.120" },
             { p: "2º", n: "Lucas Silva", e: "Agreste", t: "2:48.345" },
-            { p: "3º", n: "Diego Santos", e: "Caruaru", t: "2:50.010" }
+            { p: "3º", n: "Diego Santos", e: "Caruaru", t: "2:50.010" },
+            { p: "4º", n: "Tiago Melo", e: "Recife", t: "2:55.600" },
+            { p: "5º", n: "Pedro Souza", e: "Gravatá", t: "3:01.220" }
         ];
 
-        function atualizarRankingCard() {
+        function atualizarRanking() {
             const cat = document.getElementById('cat-select').value;
-            document.getElementById('print-cat').innerText = cat || "SELECIONE";
-            const container = document.getElementById('ranking-lista-print');
-            container.innerHTML = "";
-            listaRankingExemplo.forEach(item => {
-                container.innerHTML += `<div class="linha"><div class="pos">${item.p}</div><div class="atleta"><span class="n">${item.n}</span><span class="e">${item.e}</span></div><div class="tempo">${item.t}</div></div>`;
+            if(!cat) return;
+            document.getElementById('print-cat').innerText = cat;
+            
+            const lista = document.getElementById('lista-rank-container');
+            lista.innerHTML = "";
+
+            // Simula dados diferentes (na prática viria do banco)
+            dadosRanking.forEach(d => {
+                lista.innerHTML += `
+                    <div class="linha-rank">
+                        <div class="pos">${d.p}</div>
+                        <div class="info">
+                            <span class="nome">${d.n}</span>
+                            <span class="equipe">${d.e}</span>
+                        </div>
+                        <div class="tempo">${d.t}</div>
+                    </div>
+                `;
             });
         }
 
         function baixarImagem() {
-            const clone = document.getElementById('area-print').cloneNode(true);
-            clone.style.transform = "none"; clone.style.position = "fixed"; clone.style.top = "0"; clone.style.left = "-9999px"; document.body.appendChild(clone);
-            html2canvas(clone, { scale: 1, backgroundColor: "#001233" }).then(canvas => {
-                const link = document.createElement('a'); link.download = `Ranking.png`;
-                link.href = canvas.toDataURL('image/png'); link.click(); document.body.removeChild(clone);
+            const el = document.getElementById('area-print');
+            // Clona para renderizar sem escala
+            const clone = el.cloneNode(true);
+            clone.style.transform = "none";
+            clone.style.position = "fixed";
+            clone.style.top = "0";
+            clone.style.left = "-9999px";
+            document.body.appendChild(clone);
+
+            html2canvas(clone, { scale: 1, backgroundColor: "#001233", width: 1080, height: 1920 }).then(canvas => {
+                const a = document.createElement('a');
+                a.download = `Ranking-${document.getElementById('cat-select').value}.png`;
+                a.href = canvas.toDataURL('image/png');
+                a.click();
+                document.body.removeChild(clone);
             });
         }
 
-        // Inicia carregando os dados financeiros (Todos)
-        carregarDadosFinanceiros();
+        carregarFinanceiro(); // Inicia tabela
     </script>
 </body>
 </html>
