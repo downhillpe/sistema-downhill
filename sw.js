@@ -1,25 +1,25 @@
-const VERSAO = 'v7'; // <--- MUDE ESSE NÚMERO SEMPRE QUE FIZER ATUALIZAÇÃO NO SITE
+const CACHE_NAME = 'dh-pe-v8'; // MUDAMOS PARA V8
+const ASSETS = [
+  'index.html',
+  'dashboard.html',
+  'admin.html',
+  'perfil.html',
+  'cadastro.html',
+  'logo.png',
+  'manifest.json'
+];
 
-self.addEventListener('install', (event) => {
-  // O comando abaixo força o novo "motor" a instalar imediatamente
+self.addEventListener('install', (e) => {
   self.skipWaiting();
+  e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
 });
 
-self.addEventListener('activate', (event) => {
-  // O comando abaixo faz o novo motor assumir o controle da página aberta na hora
-  event.waitUntil(clients.claim());
+self.addEventListener('activate', (e) => {
+  e.waitUntil(caches.keys().then(keys => Promise.all(
+    keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+  )));
 });
 
-self.addEventListener('fetch', (event) => {
-  // Estratégia: NETWORK FIRST (Internet Primeiro)
-  // Tenta baixar a versão nova da internet. Se não tiver internet, usa o que tem salvo.
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        return response;
-      })
-      .catch(() => {
-        return caches.match(event.request);
-      })
-  );
+self.addEventListener('fetch', (e) => {
+  e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
 });
