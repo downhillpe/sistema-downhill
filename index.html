@@ -7,34 +7,47 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#003399">
-    <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js?v=8');}</script>
+    <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js?v=11');}</script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { 
-            background: linear-gradient(rgba(0, 51, 153, 0.8), rgba(0, 51, 153, 0.8)), url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Bandeira_de_Pernambuco.svg/1200px-Bandeira_de_Pernambuco.svg.png'); 
+            background: linear-gradient(rgba(0, 51, 153, 0.8), rgba(0, 51, 153, 0.8)), 
+                        url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Bandeira_de_Pernambuco.svg/1200px-Bandeira_de_Pernambuco.svg.png'); 
             background-size: cover; display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
-        .login-box { background: white; padding: 40px 30px; border-radius: 25px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border-bottom: 8px solid #ffcc00; }
-        .img-logo { width: 150px; height: auto; margin-bottom: 20px; }
-        h2 { color: #003399; font-size: 24px; font-weight: 900; margin-bottom: 20px; }
+        .login-box { background: white; padding: 40px 30px; border-radius: 25px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4); position: relative; }
+        .img-logo { width: 140px; margin-bottom: 20px; }
         input { width: 100%; padding: 14px; margin-bottom: 15px; border: 2px solid #eee; border-radius: 12px; font-size: 16px; outline: none; }
         .btn-entrar { width: 100%; padding: 16px; background: #003399; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         .links { margin-top: 15px; display: flex; justify-content: space-between; font-size: 13px; }
-        a { color: #003399; text-decoration: none; font-weight: bold; }
+        a { color: #003399; text-decoration: none; font-weight: bold; cursor: pointer; }
+        
+        /* Modal Esqueci Senha */
+        .modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; border-radius: 25px; flex-direction: column; justify-content: center; padding: 30px; z-index: 10; }
+        .fechar { position: absolute; top: 20px; right: 20px; font-size: 20px; color: #999; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="login-box">
         <img src="logo.png" alt="Logo" class="img-logo">
-        <h2>DOWNHILL PE</h2>
         <input type="text" id="loginCpf" placeholder="CPF">
         <input type="password" id="loginPass" placeholder="Senha">
         <div class="links">
-            <a href="#" onclick="alert('Usa o CPF e Data de Nascimento no botão esqueci senha que configuramos antes!')">Esqueci a senha</a>
+            <a onclick="abrirModal()">Esqueci minha senha</a>
             <a href="cadastro.html">Criar conta</a>
         </div>
         <button class="btn-entrar" onclick="fazerLogin()" style="margin-top:20px;">ENTRAR</button>
+
+        <div id="modalRecuperar" class="modal">
+            <i class="fas fa-times fechar" onclick="fecharModal()"></i>
+            <h3 style="color:#003399; margin-bottom:10px;">Recuperar Senha</h3>
+            <p style="font-size:12px; color:#666; margin-bottom:15px;">Confirme seus dados cadastrados:</p>
+            <input type="text" id="rec-cpf" placeholder="Seu CPF">
+            <input type="date" id="rec-nasc">
+            <button class="btn-entrar" onclick="recuperar()" style="background:#27ae60;">VER MINHA SENHA</button>
+        </div>
     </div>
+
     <script>
         function fazerLogin() {
             const cpf = document.getElementById('loginCpf').value;
@@ -42,7 +55,20 @@
             const salvo = JSON.parse(localStorage.getItem('usuarioPiloto'));
             if ((salvo && salvo.cpf === cpf && salvo.senha === pass) || (cpf === '000' && pass === '000')) {
                 window.location.href = "dashboard.html";
-            } else { alert("Dados incorretos!"); }
+            } else { alert("Dados incorretos ou cadastro não encontrado neste aparelho."); }
+        }
+
+        function abrirModal() { document.getElementById('modalRecuperar').style.display = 'flex'; }
+        function fecharModal() { document.getElementById('modalRecuperar').style.display = 'none'; }
+
+        function recuperar() {
+            const cpf = document.getElementById('rec-cpf').value;
+            const nasc = document.getElementById('rec-nasc').value;
+            const salvo = JSON.parse(localStorage.getItem('usuarioPiloto'));
+            if (salvo && salvo.cpf === cpf && salvo.nascimento === nasc) {
+                alert("Sua senha é: " + salvo.senha);
+                fecharModal();
+            } else { alert("Dados não conferem!"); }
         }
     </script>
 </body>
