@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>FPC Sistema V15</title>
+    <title>FPC Sistema V16</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f1c3f">
@@ -13,14 +13,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     
     <script>
-        // ANTI-CACHE V15
-        if (!window.location.search.includes('v=15')) {
+        // ANTI-CACHE V16
+        if (!window.location.search.includes('v=16')) {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.getRegistrations().then(function(regs) {
                     for(let reg of regs) reg.unregister();
                 });
             }
-            var newUrl = window.location.href.split('?')[0] + '?v=15';
+            var newUrl = window.location.href.split('?')[0] + '?v=16';
             window.location.replace(newUrl);
         }
     </script>
@@ -38,7 +38,7 @@
         h1 { font-size: 1.5rem; font-weight: 900; }
         .sub { color: #fdd000; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; }
 
-        /* INPUTS & FORM */
+        /* FORMULÁRIOS */
         .form-box { width: 100%; max-width: 400px; }
         .input-group { margin-bottom: 15px; position: relative; }
         .input-group label { display: block; color: #ccc; margin-bottom: 5px; font-weight: 600; font-size: 0.85rem; }
@@ -50,29 +50,45 @@
         .btn-primary { background: #fdd000; color: #0f1c3f; box-shadow: 0 4px 15px rgba(253, 208, 0, 0.2); }
         .btn-outline { background: transparent; border: 2px solid #fdd000; color: #fdd000; margin-top: 15px; }
 
-        /* MENU DE ABAS (TABS) */
+        /* MENU DE ABAS (TABS) RESTAURADO */
         .tabs-container { width: 100%; display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .tab-btn { flex: 1; padding: 15px 5px; text-align: center; font-size: 0.8rem; font-weight: bold; color: #aaa; background: transparent; border: none; cursor: pointer; text-transform: uppercase; }
         .tab-btn.active { color: #fdd000; border-bottom: 3px solid #fdd000; }
         .tab-content { display: none; width: 100%; animation: fade 0.3s; }
         .tab-content.active { display: block; }
 
-        /* LISTA DE EVENTOS */
-        .event-list-container { width: 100%; display: flex; flex-direction: column; gap: 15px; }
-        .event-card { 
-            background: rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; border-left: 5px solid #fdd000; cursor: pointer; transition: transform 0.1s;
+        /* DESIGN DOS BOTÕES DE SUBMENU (O QUE VOCÊ GOSTAVA) */
+        .submenu-btn {
+            width: 100%; 
+            background: rgba(255,255,255,0.08); 
+            padding: 20px; 
+            margin-bottom: 15px;
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-left: 5px solid #fdd000; /* Borda amarela lateral */
+            cursor: pointer;
+            transition: background 0.2s;
         }
-        .event-card:active { transform: scale(0.98); background: rgba(255,255,255,0.2); }
-        .event-card h3 { font-size: 1.1rem; text-transform: uppercase; margin-bottom: 5px; color: white; }
-        .event-card p { color: #ccc; font-size: 0.9rem; margin-bottom: 10px; }
-        .status-badge { background: #009640; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; display: inline-block; }
-
-        /* SUBMENU */
-        .submenu-btn { width: 100%; background: rgba(255,255,255,0.08); padding: 20px; margin-bottom: 15px; border-radius: 12px; display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; }
+        .submenu-btn:active { background: rgba(255,255,255,0.15); }
         .submenu-btn i { font-size: 1.8rem; color: #fdd000; margin-right: 20px; width: 40px; text-align: center; }
         .submenu-btn div { text-align: left; }
-        .submenu-btn h4 { margin: 0; font-size: 1rem; text-transform: uppercase; }
-        .submenu-btn span { font-size: 0.75rem; color: #aaa; }
+        .submenu-btn h4 { margin: 0; font-size: 1rem; text-transform: uppercase; font-weight: 800; }
+        .submenu-btn span { font-size: 0.75rem; color: #ccc; }
+
+        /* DESIGN DOS CARDS DE EVENTO (LISTA) */
+        .event-card { 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 12px; 
+            padding: 20px; 
+            border-left: 5px solid #00c753; /* Verde para eventos abertos */
+            cursor: pointer; margin-bottom: 15px;
+        }
+        .event-card.future { border-left: 5px solid #fdd000; }
+        .event-card h3 { font-size: 1.1rem; text-transform: uppercase; margin-bottom: 5px; color: white; }
+        .event-card p { color: #ccc; font-size: 0.9rem; margin-bottom: 10px; }
+        .status-badge { background: #009640; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; float: right; }
 
         /* PAGINAS */
         .page { display: none; width: 100%; animation: fade 0.3s; flex-direction: column; align-items: center; }
@@ -86,8 +102,8 @@
         
         /* TABELAS CBC */
         .cbc-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
-        .cbc-table td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .cbc-header { color: #fdd000; font-weight: bold; text-align: left; }
+        .cbc-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .cbc-header { color: #fdd000; font-weight: bold; text-align: left; width: 40%; }
 
         /* MODAL MANUAL */
         #manual-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; justify-content: center; align-items: center; padding: 30px; }
@@ -101,15 +117,13 @@
             <div class="header">
                 <div class="logo-circle"><img src="logo-fpc.png"></div>
                 <h1>F.P.C.</h1>
-                <div class="sub">SISTEMA ATLETA V15</div>
+                <div class="sub">SISTEMA ATLETA V16</div>
             </div>
-            
             <div id="install-btn-area" style="display:none; width:100%; max-width:400px; margin-bottom:15px;">
                 <button class="btn" onclick="acaoInstalar()" style="background:#009640; color:white; border:2px solid #00c753;">
                     <i class="fas fa-download"></i> INSTALAR APP
                 </button>
             </div>
-
             <div class="form-box">
                 <div class="input-group"><label>CPF</label><input type="tel" id="login-cpf" oninput="maskCPF(this)"></div>
                 <div class="input-group">
@@ -121,9 +135,8 @@
                 <div style="text-align:center; margin-top:15px; font-size:0.8rem; color:#aaa;" onclick="mudarTela('pg-recover')"><u>Esqueci minha senha</u></div>
                 <button class="btn btn-outline" onclick="mudarTela('pg-register')">CRIAR CONTA</button>
             </div>
-            
             <div style="margin-top:auto; padding:20px; text-align:center;">
-                <span style="background:#e30613; padding:4px 10px; border-radius:4px; font-size:0.7rem; font-weight:bold;">VERSÃO 15.0 (BANCO FIXO)</span>
+                <span style="background:#e30613; padding:4px 10px; border-radius:4px; font-size:0.7rem; font-weight:bold;">VERSÃO 16.0 (GRAVATÁ + DESIGN)</span>
                 <span style="display:block; margin-top:10px; color:#aaa; font-size:0.7rem; text-decoration:underline;" onclick="forcarUpdate()">Forçar Atualização</span>
             </div>
         </div>
@@ -135,11 +148,7 @@
                 <div class="input-group"><label>Data de Nascimento</label><input type="date" id="reg-nasc"></div>
                 <div class="input-group"><label>WhatsApp</label><input type="tel" id="reg-phone" oninput="maskPhone(this)"></div>
                 <div class="input-group"><label>CPF</label><input type="tel" id="reg-cpf" oninput="maskCPF(this)"></div>
-                <div class="input-group">
-                    <label>Senha</label>
-                    <input type="password" id="reg-pass">
-                    <i class="fas fa-eye eye-icon" onclick="togglePass('reg-pass', this)"></i>
-                </div>
+                <div class="input-group"><label>Senha</label><input type="password" id="reg-pass"><i class="fas fa-eye eye-icon" onclick="togglePass('reg-pass', this)"></i></div>
                 <div class="input-group" style="margin-top:20px; border-top:1px dashed #555; padding-top:15px;">
                     <label style="color:#fdd000;">Palavra de Segurança</label>
                     <input type="text" id="reg-sec" placeholder="Ex: Nome da mãe">
@@ -170,10 +179,12 @@
                 <i class="fas fa-sign-out-alt" style="font-size:1.6rem; color:#e30613;" onclick="location.reload()"></i>
             </div>
             <div class="dash-grid">
-                <div class="dash-item" onclick="abrirSubmenu('Downhill')"><i class="fas fa-mountain"></i><b>Downhill</b></div>
-                <div class="dash-item" onclick="abrirSubmenu('Speed')"><i class="fas fa-tachometer-alt"></i><b>Speed</b></div>
-                <div class="dash-item" onclick="abrirSubmenu('MTB')"><i class="fas fa-biking"></i><b>MTB</b></div>
-                <div class="dash-item" onclick="abrirSubmenu('BMX')"><i class="fas fa-bicycle"></i><b>BMX</b></div>
+                <div class="dash-item" onclick="abrirSubmenuDownhill()"><i class="fas fa-mountain"></i><b>Downhill</b></div>
+                
+                <div class="dash-item" onclick="abrirCategoriasGenerica('Speed')"><i class="fas fa-tachometer-alt"></i><b>Speed</b></div>
+                <div class="dash-item" onclick="abrirCategoriasGenerica('MTB')"><i class="fas fa-biking"></i><b>MTB</b></div>
+                <div class="dash-item" onclick="abrirCategoriasGenerica('BMX')"><i class="fas fa-bicycle"></i><b>BMX</b></div>
+                
                 <div class="dash-item" onclick="alert('Em breve')"><i class="fas fa-handshake"></i><b>Parceiros</b></div>
                 <div class="dash-item" onclick="alert('Em breve')"><i class="far fa-newspaper"></i><b>Notícias</b></div>
             </div>
@@ -181,7 +192,7 @@
 
         <div id="pg-submenu" class="page">
             <div class="header">
-                <i id="sub-icon" class="fas fa-mountain" style="font-size:3rem; color:#fdd000; margin-bottom:10px;"></i>
+                <i class="fas fa-mountain" style="font-size:3rem; color:#fdd000; margin-bottom:10px;"></i>
                 <h2 id="sub-title">DOWNHILL</h2>
                 <div class="sub">MENU DA MODALIDADE</div>
             </div>
@@ -226,7 +237,7 @@
                 <p><b>Local:</b> <span id="detail-local">...</span></p>
                 <p><b>Data:</b> <span id="detail-data">...</span></p>
                 <br>
-                <p>Estrutura completa, resgate e cronometragem oficial.</p>
+                <p>O evento contará com estrutura completa, cronometragem oficial e ranking válido pela FPC.</p>
             </div>
 
             <div id="tab-cat" class="tab-content form-box">
@@ -249,11 +260,32 @@
                     <h2 id="user-cat-display" style="color:#fdd000; margin-bottom:15px;">...</h2>
                     <div style="border-top:1px dashed #555; margin:15px 0;"></div>
                     <p>Valor: <strong style="color:#00ff6a; font-size:1.2rem;">R$ 120,00</strong></p>
-                    <button class="btn btn-primary" onclick="alert('PIX Gerado!')">GERAR PIX</button>
+                    <button class="btn btn-primary" onclick="alert('Em breve: Chave PIX')">GERAR PIX</button>
                 </div>
             </div>
 
             <button class="btn btn-outline" style="margin-top:20px;" onclick="mudarTela('pg-events-list')">VOLTAR</button>
+        </div>
+
+        <div id="pg-generic-cat" class="page">
+            <h3 style="margin:20px 0; color:#fdd000;" id="generic-title">MODALIDADE</h3>
+            <div class="form-box">
+                <p style="text-align:center; color:#ccc; margin-bottom:20px;">Calendário em atualização. Confira as categorias baseadas na sua idade:</p>
+                
+                <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; margin-bottom:20px; text-align:center;">
+                    <p style="color:#aaa; font-size:0.8rem;">VOCÊ SE ENQUADRA EM:</p>
+                    <h2 id="user-generic-cat" style="color:#fdd000;">...</h2>
+                </div>
+
+                <table class="cbc-table">
+                    <tr><td class="cbc-header">Elite</td><td>Open</td></tr>
+                    <tr><td class="cbc-header">Sub-30</td><td>19-29</td></tr>
+                    <tr><td class="cbc-header">Master A</td><td>30-39</td></tr>
+                    <tr><td class="cbc-header">Master B</td><td>40-49</td></tr>
+                    <tr><td class="cbc-header">Master C</td><td>50+</td></tr>
+                </table>
+            </div>
+            <button class="btn btn-outline" onclick="mudarTela('pg-dash')">VOLTAR AO INÍCIO</button>
         </div>
 
         <div id="manual-modal" onclick="this.style.display='none'">
@@ -268,37 +300,23 @@
     </div>
 
     <script>
-        // === BANCO DE DADOS FIXO (NÃO MUDA MAIS) ===
-        // Agora usamos 'fpc_banco_oficial' para tudo.
-        // Se a gente atualizar o site no futuro, os dados continuarão aqui.
+        // === BANCO DE DADOS ===
         let users = JSON.parse(localStorage.getItem('fpc_banco_oficial')) || [];
-        
-        // Tentativa de migrar dados antigos (se o usuário tiver)
-        // Isso ajuda quem tinha dados na V14 a não perder
-        if(users.length === 0) {
-            let oldUsers = JSON.parse(localStorage.getItem('users_v14'));
-            if(oldUsers) {
-                users = oldUsers;
-                localStorage.setItem('fpc_banco_oficial', JSON.stringify(users));
-            }
-        }
-
         let currentUser = null;
         let tempRecUser = null;
-        let currentModalidade = "";
 
+        // === LISTA DE EVENTOS DOWNHILL (COM GRAVATÁ) ===
         const eventsDB = [
-            { id: 1, local: "Etapa Ouricuri-PE", data: "25 e 26 de Abril", status: "Aberto" },
-            { id: 2, local: "Etapa Caruaru-PE", data: "16 e 17 de Maio", status: "Em Breve" },
-            { id: 3, local: "Etapa Santa Cruz-PE", data: "29 e 30 de Agosto", status: "Em Breve" }
+            { id: 1, local: "Etapa Ouricuri-PE", data: "25/26 Abril", status: "Aberto" },
+            { id: 2, local: "Etapa Caruaru-PE", data: "16/17 Maio", status: "Futuro" },
+            { id: 3, local: "Etapa Gravatá-PE", data: "Julho (A definir)", status: "Futuro" },
+            { id: 4, local: "Etapa Santa Cruz-PE", data: "29/30 Agosto", status: "Futuro" }
         ];
 
         function calcularCategoriaCBC(nascimento) {
             if(!nascimento) return "Visitante";
             const anoNasc = new Date(nascimento).getFullYear();
-            const anoAtual = new Date().getFullYear();
-            const idade = anoAtual - anoNasc;
-
+            const idade = new Date().getFullYear() - anoNasc;
             if (idade <= 18) return "Júnior (Até 18)";
             if (idade >= 19 && idade <= 29) return "Sub-30 (19-29)";
             if (idade >= 30 && idade <= 34) return "Master A1 (30-34)";
@@ -324,29 +342,37 @@
             event.target.classList.add('active');
         }
 
-        function abrirSubmenu(mod) {
-            currentModalidade = mod;
-            document.getElementById('sub-title').innerText = mod.toUpperCase();
-            let icon = "fas fa-bicycle";
-            if(mod === "Downhill") icon = "fas fa-mountain";
-            if(mod === "Speed") icon = "fas fa-tachometer-alt";
-            if(mod === "MTB") icon = "fas fa-biking";
-            document.getElementById('sub-icon').className = icon;
+        // LÓGICA DOWNHILL
+        function abrirSubmenuDownhill() {
             mudarTela('pg-submenu');
+        }
+
+        // LÓGICA OUTRAS MODALIDADES (MOSTRAR CATEGORIAS)
+        function abrirCategoriasGenerica(mod) {
+            document.getElementById('generic-title').innerText = mod.toUpperCase();
+            if(currentUser) {
+                document.getElementById('user-generic-cat').innerText = calcularCategoriaCBC(currentUser.nasc);
+            }
+            mudarTela('pg-generic-cat');
         }
 
         function abrirListaEventos() {
             const container = document.getElementById('events-container');
             container.innerHTML = "";
             eventsDB.forEach(ev => {
+                let statusClass = ev.status === "Aberto" ? "status-badge" : "status-badge future";
+                let statusStyle = ev.status === "Futuro" ? "background:#fdd000; color:#0f1c3f;" : "";
+                
                 container.innerHTML += `
-                <div class="event-card" onclick="abrirDetalheEvento(${ev.id})">
+                <div class="event-card ${ev.status === 'Futuro' ? 'future' : ''}" onclick="abrirDetalheEvento(${ev.id})">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <h3>${ev.local}</h3>
-                        <span class="status-badge">${ev.status}</span>
+                        <span class="status-badge" style="${statusStyle}">${ev.status}</span>
                     </div>
                     <p><i class="far fa-calendar-alt"></i> ${ev.data}</p>
-                    <div style="color:#fdd000; font-size:0.8rem; font-weight:bold;">TOQUE PARA INSCREVER &rarr;</div>
+                    <div style="color:${ev.status === 'Futuro' ? '#ccc' : '#00ff6a'}; font-size:0.8rem; font-weight:bold;">
+                        ${ev.status === 'Futuro' ? 'EM BREVE' : 'INSCRIÇÃO ABERTA &rarr;'}
+                    </div>
                 </div>`;
             });
             mudarTela('pg-events-list');
@@ -376,11 +402,8 @@
             const nome=document.getElementById('reg-nome').value, nasc=document.getElementById('reg-nasc').value, phone=document.getElementById('reg-phone').value, cpf=document.getElementById('reg-cpf').value, pass=document.getElementById('reg-pass').value, sec=document.getElementById('reg-sec').value;
             if(!nome || !nasc || !phone || !cpf || !pass || !sec) return alert("Preencha todos os campos!");
             if(users.find(u => u.cpf === cpf)) return alert("CPF já cadastrado!");
-            
-            // SALVANDO NO BANCO FIXO
             users.push({ nome, nasc, phone, cpf, pass, sec });
             localStorage.setItem('fpc_banco_oficial', JSON.stringify(users));
-            
             alert("Cadastro realizado!"); mudarTela('pg-login');
         }
 
