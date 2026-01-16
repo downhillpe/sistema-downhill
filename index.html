@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DH-PE v28.0 (Social)</title>
+    <title>DH-PE v37.0 (Final Master)</title>
     
     <link rel="icon" type="image/jpg" href="logo-fp.jpg">
     <link rel="apple-touch-icon" href="logo-fp.jpg">
@@ -25,13 +25,14 @@
         /* GERAL */
         .btn { width: 100%; padding: 14px; border: none; border-radius: 6px; background: var(--pe-blue); color: white; font-weight: 700; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); font-size: 14px; text-transform: uppercase; }
         .btn:active { transform: scale(0.97); background: #002a80; }
-        .input-group { margin-bottom: 15px; width: 100%; }
+        .input-group { margin-bottom: 15px; width: 100%; position: relative; }
         .input-group label { font-size: 11px; font-weight: 800; color: var(--pe-blue); margin-left: 2px; display: block; margin-bottom: 5px; }
         .input-wrapper { display: flex; align-items: center; position: relative; }
         input, select { width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; background: white; font-size: 14px; color: #1e293b; font-weight: 600; }
         
         /* OLHO SENHA */
-        .pass-eye { position: absolute; right: 10px; color: #666; cursor: pointer; padding: 5px; font-size: 16px; }
+        .pass-eye { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #666; cursor: pointer; z-index: 10; font-size: 18px; }
+        .input-wrapper .pass-eye { top: 50%; transform: translateY(-50%); }
 
         /* TELAS */
         .screen { display: none; flex-direction: column; animation: fade 0.3s; background: var(--bg-body); padding-bottom: 80px; width: 100%; min-height: 100vh; }
@@ -49,19 +50,21 @@
         .login-content-layer label { color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.8); font-weight: 900; }
         .login-content-layer .checkbox-wrapper { color: white; font-weight: bold; text-shadow: 0 1px 2px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 8px; font-size: 12px; margin-top: 10px;}
         
-        /* HEADER */
+        /* HEADER & VIDEO */
         .app-header { background: white; padding: 10px 15px; display: none; justify-content: flex-end; align-items: center; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 500; }
         .version-badge { font-size: 10px; font-weight: 900; color: var(--pe-blue); background: #e0e7ff; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--pe-blue); cursor: pointer; }
-        .video-header { width: 100%; height: 100px; background: #000; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .video-header iframe { width: 100%; height: 150%; border: none; margin-top: -25px; }
+        
+        /* VIDEO PLAYER */
+        .video-header { width: 100%; height: 220px; background: #000; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .video-header iframe, .video-header video { width: 100%; height: 100%; border: none; object-fit: contain; }
+        .vid-nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px; cursor: pointer; font-weight: bold; font-size: 12px; z-index: 10; }
+        .vid-prev { left: 0; } .vid-next { right: 0; }
 
         /* LISTAS & CALENDARIO */
         .section-header-area { background: white; padding: 10px 15px; border-bottom: 1px solid #eee; margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; }
         .section-title { font-size: 14px; color: var(--pe-blue); font-weight: 900; display: flex; align-items: center; gap: 8px; border-left: 5px solid var(--pe-yellow); padding-left: 10px; }
         .filter-row { display: flex; gap: 5px; }
         .calendar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 15px; }
-        
-        /* CARD EVENTO */
         .event-card { background: white; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; aspect-ratio: 1 / 1.45; }
         .event-top { background: var(--pe-blue); color: white; padding: 8px; text-align: center; font-weight: 700; font-size: 11px; }
         .event-body { padding: 10px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; text-align: center; }
@@ -76,9 +79,6 @@
         .rank-row { display: flex; align-items: center; padding: 10px 8px; border-bottom: 1px solid #f1f5f9; font-size: 11px; }
         .rank-row:nth-child(even) { background: #f8fafc; }
         .rank-pos { width: 25px; font-weight: 900; color: #64748b; font-size: 12px; display: flex; align-items: center; justify-content: center; }
-        .rank-row:nth-of-type(1) .rank-pos { color: var(--gold); font-size: 16px; }
-        .rank-row:nth-of-type(2) .rank-pos { color: var(--silver); font-size: 14px; }
-        .rank-row:nth-of-type(3) .rank-pos { color: var(--bronze); font-size: 14px; }
         .rank-name { flex: 1; font-weight: 700; color: #334155; display: flex; flex-direction: column; padding-left: 5px; }
         .rank-val { font-family: monospace; font-weight: 900; color: var(--pe-blue); background: #e0e7ff; padding: 4px 8px; border-radius: 4px; font-size: 11px; }
 
@@ -91,22 +91,23 @@
         .btn-mini-adm { padding: 4px 8px; border-radius: 4px; border:none; color:white; font-size: 10px; cursor: pointer; }
         .btn-red { background: #ef4444; } .btn-blue { background: #3b82f6; } .btn-green { background: var(--pe-green); }
         .perm-list { display: flex; flex-direction: column; gap: 5px; max-height: 100px; overflow-y: auto; background: #f9f9f9; padding: 5px; border: 1px solid #eee; margin-top: 5px; }
-        .pending-row { border-left: 4px solid orange; background: #fff7ed; }
         .pending-tag { font-size: 8px; background: orange; color: white; padding: 2px 4px; border-radius: 2px; margin-left: 5px; }
 
         /* SEARCHABLE LIST */
         .smart-search-container { position: relative; }
-        .smart-list { position: absolute; top: 100%; left: 0; width: 100%; background: white; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; z-index: 100; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .smart-item { padding: 10px; border-bottom: 1px solid #eee; font-size: 11px; cursor: pointer; }
+        .smart-list { position: absolute; top: 100%; left: 0; width: 100%; background: white; border: 1px solid #ddd; max-height: 250px; overflow-y: auto; z-index: 100; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .smart-item { padding: 10px; border-bottom: 1px solid #eee; font-size: 11px; cursor: pointer; display:flex; justify-content:space-between; align-items:center; }
         .smart-item:hover { background: #f0f9ff; }
+        .smart-actions { display:flex; gap:5px; }
 
         /* TABLE */
         .fin-table { width: 100%; border-collapse: collapse; font-size: 10px; margin-top: 10px; }
         .fin-table th { background: var(--pe-blue); color: white; padding: 8px; text-align: left; }
         .fin-table td { border-bottom: 1px solid #eee; padding: 8px; background: white; }
-        .status-pend { color: #d97706; font-weight: 800; background: #fef3c7; padding: 2px 6px; border-radius: 4px; }
-        .status-ok { color: #166534; font-weight: 800; background: #dcfce7; padding: 2px 6px; border-radius: 4px; }
+        .status-pend { color: #d97706; font-weight: 800; background: #fef3c7; padding: 2px 6px; border-radius: 4px; cursor:pointer; }
+        .status-ok { color: #166534; font-weight: 800; background: #dcfce7; padding: 2px 6px; border-radius: 4px; cursor:pointer; }
         .stats-box { display: flex; gap: 10px; margin: 10px 0; background: #f0f9ff; padding: 10px; border-radius: 6px; justify-content: space-around; font-size: 10px; font-weight: bold; color: var(--pe-blue); border: 1px solid #bae6fd; }
+        .wpp-big { font-size: 24px; color: #25D366; vertical-align: middle; margin-left: 5px; }
 
         /* SHARE INSTAGRAM */
         .share-card { background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); padding: 30px; border-radius: 15px; color: white; text-align: center; margin-bottom: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
@@ -134,15 +135,25 @@
         @keyframes scrollLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         @keyframes fade { from { opacity:0; } to { opacity:1; } }
         
-        /* IMPRESSÃO CONFIGURADA */
+        /* IMPRESSÃO (PLANILHA TÉCNICA) */
         @media print { 
             body * { visibility: hidden; } 
             #printable-area, #printable-area * { visibility: visible; } 
-            #printable-area { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background:white; }
-            .print-cat-block { margin-bottom: 30px; page-break-inside: avoid; }
-            .print-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-            .print-table th, .print-table td { border: 1px solid #333; padding: 5px; text-align: left; }
-            .print-header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+            #printable-area { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background:white; color:black; }
+            
+            .print-cat-block { margin-bottom: 20px; page-break-inside: avoid; border: 2px solid #000; }
+            .print-cat-title { background: #333; color: white; font-weight: bold; padding: 8px; text-align: center; font-size: 14px; -webkit-print-color-adjust: exact; }
+            
+            .print-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: 'Arial', sans-serif; }
+            .print-table th, .print-table td { border: 1px solid #000; padding: 8px; text-align: left; }
+            .print-table th { background: #eee !important; -webkit-print-color-adjust: exact; font-weight: 800; text-transform: uppercase; }
+            
+            .print-header { text-align: center; margin-bottom: 20px; border-bottom: 4px solid #000; padding-bottom: 10px; }
+            .print-header h1 { font-size: 24px; margin: 0; font-weight: 900; text-transform: uppercase; }
+            .print-header p { font-size: 14px; margin: 5px 0 0 0; }
+            
+            /* ESPAÇO PARA TEMPO MANUAL */
+            .time-cell { width: 180px; } 
         }
 
         /* MODAIS */
@@ -158,59 +169,12 @@
 <div id="area-cupom-visual" style="display:none"></div>
 <div id="printable-area" style="display:none; padding:20px;"></div>
 
-<div class="modal-overlay" id="modal-share">
-    <div class="modal-box" style="background:transparent; box-shadow:none; border:none">
-        <div class="share-card">
-            <h2>EU VOU!</h2>
-            <p>DH-PE 2026</p>
-            <p id="share-piloto-name" style="font-size:18px; margin:15px 0">...</p>
-            <p id="share-event-name" style="font-size:12px; opacity:0.9">...</p>
-            <div class="share-badge">INSCRICÃO CONFIRMADA</div>
-        </div>
-        <p style="color:white; font-size:11px; margin-bottom:10px">TIRE UM PRINT E POSTE NO INSTAGRAM!</p>
-        <button class="btn" style="background:white; color:#333" onclick="fecharModal('modal-share')">FECHAR</button>
-    </div>
-</div>
-
-<div class="modal-overlay" id="modal-print-options">
-    <div class="modal-box">
-        <h3 style="color:var(--pe-blue)">IMPRIMIR LISTA</h3>
-        <button class="btn" onclick="generatePrint('ALL')">TODAS CATEGORIAS (GERAL)</button>
-        <div style="margin:10px 0; border-top:1px solid #eee; padding-top:10px; font-size:10px; font-weight:bold; color:#666">OU POR CATEGORIA:</div>
-        <div id="print-cat-list" style="max-height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:5px;"></div>
-        <button class="btn" style="background:#ddd; color:#333; margin-top:10px" onclick="fecharModal('modal-print-options')">CANCELAR</button>
-    </div>
-</div>
-
-<div class="modal-overlay" id="modal-edit-user">
-    <div class="modal-box">
-        <h3 style="color:var(--pe-blue)">EDITAR ATLETA</h3>
-        <input type="hidden" id="edit-user-original-cpf">
-        <div class="input-group"><label>NOME</label><input id="edit-user-name" class="uppercase-input"></div>
-        <div class="input-group"><label>CIDADE</label><input id="edit-user-city" class="uppercase-input"></div>
-        <div class="input-group"><label>CATEGORIA</label><input id="edit-user-cat"></div>
-        <div class="input-group"><label>GÊNERO (M/F)</label><input id="edit-user-gender" maxlength="1" class="uppercase-input"></div>
-        <button class="btn" onclick="saveUserEdit()">SALVAR ALTERAÇÕES</button>
-        <button class="btn" style="background:#ddd; color:#333; margin-top:5px" onclick="fecharModal('modal-edit-user')">CANCELAR</button>
-    </div>
-</div>
-
+<div class="modal-overlay" id="modal-share"><div class="modal-box" style="background:transparent; box-shadow:none; border:none"><div class="share-card"><h2>EU VOU!</h2><p>DH-PE 2026</p><p id="share-piloto-name" style="font-size:18px; margin:15px 0">...</p><p id="share-event-name" style="font-size:12px; opacity:0.9">...</p><div class="share-badge">INSCRICÃO CONFIRMADA</div></div><p style="color:white; font-size:11px; margin-bottom:10px">TIRE UM PRINT E POSTE NO INSTAGRAM!</p><button class="btn" style="background:white; color:#333" onclick="fecharModal('modal-share')">FECHAR</button></div></div>
+<div class="modal-overlay" id="modal-print-options"><div class="modal-box"><h3 style="color:var(--pe-blue)">IMPRIMIR PLANILHA</h3><button class="btn" onclick="generatePrint('ALL')">TODAS CATEGORIAS (GERAL)</button><div style="margin:10px 0; border-top:1px solid #eee; padding-top:10px; font-size:10px; font-weight:bold; color:#666">OU POR CATEGORIA:</div><div id="print-cat-list" style="max-height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:5px;"></div><button class="btn" style="background:#ddd; color:#333; margin-top:10px" onclick="fecharModal('modal-print-options')">CANCELAR</button></div></div>
+<div class="modal-overlay" id="modal-edit-user"><div class="modal-box"><h3 style="color:var(--pe-blue)">EDITAR ATLETA</h3><input type="hidden" id="edit-user-original-cpf"><div class="input-group"><label>NOME</label><input id="edit-user-name" class="uppercase-input"></div><div class="input-group"><label>CIDADE</label><input id="edit-user-city" class="uppercase-input"></div><div class="input-group"><label>CATEGORIA</label><input id="edit-user-cat"></div><div class="input-group"><label>GÊNERO (M/F)</label><input id="edit-user-gender" maxlength="1" class="uppercase-input"></div><button class="btn" onclick="saveUserEdit()">SALVAR ALTERAÇÕES</button><button class="btn" style="background:#ddd; color:#333; margin-top:5px" onclick="fecharModal('modal-edit-user')">CANCELAR</button></div></div>
 <div class="modal-overlay" id="modal-poster"><div class="modal-box" style="padding:0; background:black; border:none; width:95%; max-width:400px"><div style="position:relative"><img id="img-poster-view" style="width:100%; display:block"><button onclick="fecharModal('modal-poster')" style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.5); color:white; border:none; padding:10px; border-radius:50%; cursor:pointer"><i class="fas fa-times"></i></button></div></div></div>
 <div class="modal-overlay" id="modal-ticket"><div class="modal-box"><h2 style="color:var(--pe-blue); margin-bottom:5px">TICKET CONFIRMADO</h2><div style="width:50px; height:5px; background:var(--pe-grad); margin:0 auto 15px auto"></div><div style="text-align:left; border:1px dashed #ccc; padding:15px; margin-bottom:15px; background:#f9f9f9"><b style="font-size:10px; color:#999">EVENTO:</b><br><span style="font-size:14px; color:var(--pe-blue); font-weight:900" id="tk-evento">...</span><br><br><b style="font-size:10px; color:#999">PILOTO:</b><br><span style="font-size:12px; color:#333; font-weight:bold" id="tk-nome">...</span></div><button class="btn" onclick="imprimirTicket()"><i class="fas fa-print"></i> IMPRIMIR PDF</button><button class="btn" onclick="fecharModal('modal-ticket')" style="background:#ddd; color:#333; margin-top:5px">FECHAR</button></div></div>
-
-<div class="modal-overlay" id="modal-pix">
-    <div class="modal-box">
-        <h3 style="color:var(--pe-green)"><i class="fas fa-qrcode"></i> PAGAMENTO</h3>
-        <p style="font-size:12px; color:#666; margin:5px 0">VALOR: <b style="color:var(--pe-blue)" id="pix-valor-display">R$ 0,00</b></p>
-        <div style="background:#f0fdf4; border:1px dashed var(--pe-green); padding:10px; margin:10px 0; font-size:10px; word-break:break-all; font-weight:bold" id="pix-copy">...</div>
-        <button class="btn" style="margin-top:0; background:#64748b" onclick="copiarPix()"><i class="far fa-copy"></i> COPIAR CÓDIGO</button>
-        <hr style="border:0; border-top:1px solid #eee; margin:15px 0">
-        <button class="btn" style="background:#25D366" onclick="enviarComprovanteWhatsApp()"><i class="fab fa-whatsapp"></i> ENVIAR COMPROVANTE</button>
-        <button class="btn" style="background:var(--pe-blue); margin-top:5px" onclick="confirmarJaPaguei()"><i class="fas fa-check-circle"></i> JÁ PAGUEI (REGISTRAR)</button>
-        <button class="btn" style="background:#ddd; color:#333; margin-top:5px" onclick="fecharModal('modal-pix')">CANCELAR</button>
-    </div>
-</div>
-
+<div class="modal-overlay" id="modal-pix"><div class="modal-box"><h3 style="color:var(--pe-green)"><i class="fas fa-qrcode"></i> PAGAMENTO</h3><p style="font-size:12px; color:#666; margin:5px 0">VALOR: <b style="color:var(--pe-blue)" id="pix-valor-display">R$ 0,00</b></p><div style="background:#f0fdf4; border:1px dashed var(--pe-green); padding:10px; margin:10px 0; font-size:10px; word-break:break-all; font-weight:bold" id="pix-copy">...</div><button class="btn" style="margin-top:0; background:#64748b" onclick="copiarPix()"><i class="far fa-copy"></i> COPIAR CÓDIGO</button><hr style="border:0; border-top:1px solid #eee; margin:15px 0"><button class="btn" style="background:#25D366" onclick="enviarComprovanteWhatsApp()"><i class="fab fa-whatsapp"></i> ENVIAR COMPROVANTE</button><button class="btn" style="background:var(--pe-blue); margin-top:5px" onclick="confirmarJaPaguei()"><i class="fas fa-check-circle"></i> JÁ PAGUEI (REGISTRAR)</button><button class="btn" style="background:#ddd; color:#333; margin-top:5px" onclick="fecharModal('modal-pix')">CANCELAR</button></div></div>
 <div class="modal-overlay" id="modal-info"><div class="modal-box"><h3 id="info-title" style="color:var(--pe-blue)">INFO</h3><p id="info-text" style="font-size:13px; color:#555; margin:15px 0; text-align:left">...</p><button class="btn" onclick="fecharModal('modal-info')" style="background:#ddd; color:#333">FECHAR</button></div></div>
 
 <div class="app-container">
@@ -224,7 +188,6 @@
             <div class="checkbox-wrapper"><input type="checkbox" id="login-remember"> MANTER CONECTADO</div>
             <button id="btn-acessar" class="btn" style="background:var(--pe-yellow); color:var(--pe-blue); font-weight:900;" onclick="fazerLogin()">ACESSAR CONTA</button>
             <button class="btn" onclick="trocarTela('cadastro')" style="background:rgba(255,255,255,0.2); color:white; margin-top:10px; border:1px solid rgba(255,255,255,0.3)">CRIAR CONTA</button>
-            <p onclick="nuclearReset()" style="margin-top:30px; font-size:10px; color:rgba(255,255,255,0.6); cursor:pointer">RESETAR BANCO</p>
         </div>
     </div>
 
@@ -245,9 +208,9 @@
 
     <div id="screen-app" class="screen">
         <div id="main-app-header" class="app-header">
-            <div class="version-badge" onclick="appRefresh()">v28.0</div>
+            <div class="version-badge" onclick="appRefresh()">v37.0</div>
         </div>
-        <div class="video-header"><iframe id="main-video-iframe" src="" allow="autoplay; encrypted-media"></iframe></div>
+        <div class="video-header" id="video-container"></div>
         <div class="stories-wrapper"><div class="stories-track" id="stories-list"></div></div>
 
         <div id="cont-calendar" class="c-sec active">
@@ -292,7 +255,7 @@
         <div id="cont-adm" class="c-sec" style="display:none; padding:10px">
             <div class="section-title" style="color:var(--pe-red)">PAINEL ADMIN</div>
             <div id="adm-login-box">
-                <div class="input-group"><label>SENHA DE SEGURANÇA</label><div class="input-wrapper"><input type="password" id="adm-pass-check"></div></div>
+                <div class="input-group"><label>SENHA DE SEGURANÇA</label><div class="input-wrapper"><input type="password" id="adm-pass-check"><i class="fas fa-eye pass-eye" onclick="togglePass('adm-pass-check')"></i></div></div>
                 <button class="btn" style="background:var(--pe-red)" onclick="checkAdmPass()">LIBERAR</button>
             </div>
             
@@ -377,13 +340,37 @@
                     <div style="background:white; border:1px solid #ddd; padding:10px; border-radius:8px;">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
                             <b style="color:var(--pe-blue); font-size:12px">ATLETAS (EDITAR)</b>
-                            <button class="btn-icon" onclick="toggleUserSearch()"><i class="fas fa-eye-slash"></i></button>
+                            <button class="btn-icon" onclick="toggleUserSearch()"><i class="fas fa-search"></i></button>
                         </div>
-                         <div id="adm-user-search-wrapper" class="smart-search-container" style="margin-top:10px; margin-bottom:10px;">
+                         <div id="adm-user-search-wrapper" class="smart-search-container" style="display:none; margin-top:10px; margin-bottom:10px;">
                             <input type="text" id="adm-edit-user-search" placeholder="BUSCAR POR NOME, CPF OU CIDADE..." oninput="filterPilots('edit-user')" autocomplete="off">
-                            <div id="adm-edit-user-list" class="smart-list"></div>
+                            <div id="adm-edit-user-list" class="smart-list" style="display:block; position:static; border:1px solid #eee; border-top:none"></div>
                         </div>
-                        <p style="font-size:10px; color:#999; text-align:center">Clique no nome para abrir edição completa</p>
+                        <p style="font-size:10px; color:#999; text-align:center">Clique na lupa para buscar atletas</p>
+                    </div>
+                </div>
+
+                <div id="adm-sec-config" style="display:none">
+                    <button class="btn" style="background:#999; margin-bottom:10px" onclick="backToAdmMenu()">VOLTAR</button>
+                    <div style="background:white; border:1px solid #ddd; padding:10px; border-radius:8px;">
+                        <b style="color:var(--pe-blue); font-size:12px">PROPAGANDA / VÍDEOS</b>
+                        <p style="font-size:10px; color:#666">Adicione múltiplos vídeos (Links, YouTube, Iframe) à playlist.</p>
+                        
+                        <div class="input-group" style="margin-top:15px">
+                            <label>LINK, ID YOUTUBE, IFRAME OU UPLOAD</label>
+                            <input id="cfg-video-any" placeholder="Cole qualquer link ou código aqui">
+                        </div>
+                        <div class="input-group" style="margin-top:5px">
+                             <label>OU UPLOAD ARQUIVO (Pequeno)</label>
+                             <input type="file" id="cfg-video-file" accept="video/*">
+                        </div>
+                        
+                        <button class="btn" onclick="addVideoToPlaylist()">ADICIONAR À PLAYLIST</button>
+                        
+                        <div style="margin-top:15px; border-top:1px solid #eee; padding-top:10px">
+                            <b style="font-size:10px">PLAYLIST ATUAL:</b>
+                            <div id="adm-video-list" style="max-height:100px; overflow-y:auto; margin-top:5px"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -403,32 +390,19 @@
                             <button class="btn-mini-adm" style="background:orange;flex:1" onclick="filterFinList('PENDENTE')">PEND</button>
                         </div>
                         <div id="fin-list-container"></div>
-                        <button class="btn" style="margin-top:10px; background:#333" onclick="openPrintOptions()"><i class="fas fa-print"></i> IMPRIMIR LISTA</button>
+                        <button class="btn" style="margin-top:10px; background:#333" onclick="openPrintOptions()"><i class="fas fa-print"></i> IMPRIMIR PLANILHA</button>
                     </div>
                 </div>
-
-                <div id="adm-sec-config" style="display:none">
-                    <button class="btn" style="background:#999; margin-bottom:10px" onclick="backToAdmMenu()">VOLTAR</button>
-                    <div style="background:white; border:1px solid #ddd; padding:10px; border-radius:8px;">
-                        <b style="color:var(--pe-blue); font-size:12px">CONFIGURAÇÕES</b>
-                        <div class="input-group" style="margin-top:15px">
-                            <label>ID VÍDEO YOUTUBE (ex: dQw4w9WgXcQ)</label>
-                            <input id="cfg-video-id">
-                        </div>
-                        <button class="btn" onclick="saveVideoConfig()">SALVAR CONFIGURAÇÃO</button>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
 
     <div class="bottom-bar" id="main-nav-bar">
-        <div class="bar-item active" onclick="nav('calendar')" id="btn-calendar"><i class="far fa-calendar-alt"></i><span>CAL</span></div>
-        <div class="bar-item" onclick="nav('tempos')" id="btn-tempos"><i class="fas fa-stopwatch"></i><span>TEMPO</span></div>
-        <div class="bar-item" onclick="nav('ranking')" id="btn-ranking"><i class="fas fa-trophy"></i><span>RANK</span></div>
-        <div class="bar-item" id="btn-adm-nav" onclick="tryOpenAdmin()"><i class="fas fa-user-shield"></i><span>ADM</span></div>
-        <div class="bar-item" ontouchstart="fazerLogout()" onclick="fazerLogout()"><i class="fas fa-sign-out-alt"></i><span>SAIR</span></div>
+        <div class="bar-item active" onclick="nav('calendar')"><i class="far fa-calendar-alt"></i><span>CAL</span></div>
+        <div class="bar-item" onclick="nav('tempos')"><i class="fas fa-stopwatch"></i><span>TEMPO</span></div>
+        <div class="bar-item" onclick="nav('ranking')"><i class="fas fa-trophy"></i><span>RANK</span></div>
+        <div class="bar-item" onclick="tryOpenAdmin()"><i class="fas fa-user-shield"></i><span>ADM</span></div>
+        <div class="bar-item" onclick="fazerLogout()"><i class="fas fa-sign-out-alt"></i><span>SAIR</span></div>
     </div>
 
 </div>
@@ -437,53 +411,31 @@
     window.onerror = function(msg, url, line) { alert("ERRO: " + msg + "\nLinha: " + line); return true; };
     function appRefresh() { window.location.reload(true); }
 
-    // --- 1. DEFINIÇÕES GLOBAIS ---
-    const DB_KEY = 'dhpe_v28_0_db'; const SESS_KEY = 'dhpe_sess_v28_0'; const REMEMBER_KEY = 'dhpe_remember_token_v280';
-    const ADMIN_CPF = "083.276.324-18"; const ADMIN_PASS = "0800"; // FORMATADO
+    const DB_KEY = 'dhpe_v37_0_db'; const SESS_KEY = 'dhpe_sess_v37_0'; const REMEMBER_KEY = 'dhpe_remember_token_v370';
+    const ADMIN_CPF = "083.276.324-18"; const ADMIN_PASS = "0800"; 
 
-    // ADMIN BASE
-    const usersList = [{ nome: "ABRAAO EVERTON LOPES DE ARAUJO", cpf: ADMIN_CPF, pass: ADMIN_PASS, cat: "ORGANIZAÇÃO", tel: "", city: "RECIFE", gender:"M", role: "ADMIN", allowedEvts: [], inscricoes: [] }];
+    const usersList = [{ nome: "ABRAAO EVERTON LOPES DE ARAUJO", cpf: ADMIN_CPF, pass: ADMIN_PASS, cat: "ORGANIZAÇÃO", tel: "81900000000", city: "RECIFE", gender:"M", role: "ADMIN", allowedEvts: [], inscricoes: [] }];
     
-    // BANCO ZERADO
     const DEFAULT_DB = {
         users: usersList,
-        events: [
-            { id:1, d:'25/26', m:'ABR', city:'OURICURI-PE', t:'1ª ETAPA ESTADUAL', val: "100,00", est:true, cbc:false, open:true, img:null },
-            { id:2, d:'16/17', m:'MAI', city:'CARUARU-PE', t:'2ª ETAPA ESTADUAL', val: "100,00", est:true, cbc:false, open:true, img:null }
-        ],
+        events: [{ id:1, d:'25/26', m:'ABR', city:'OURICURI-PE', t:'1ª ETAPA ESTADUAL', val: "100,00", est:true, cbc:false, open:true, img:null }],
         tempos: [], ranking: [],
-        config: { logo: 'logo-fp.jpg', videoId: 'dQw4w9WgXcQ' },
+        config: { logo: 'logo-fp.jpg', videos: [] }, 
         stories: [ { title: 'REGRAS', icon: 'fa-book' }, { title: 'MAXXIS', icon: 'fa-star' }, { title: 'FPC', icon: 'fa-flag' } ]
     };
 
     function cleanCPF(v) { return v ? v.replace(/\D/g, "") : ""; } 
-    
-    function mascaraCPF(i) {
-        let v = i.value.replace(/\D/g, "");
-        if (v.length > 11) v = v.substring(0, 11);
-        i.value = v.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-    }
-    
-    function mascaraTel(i) {
-        let v = i.value.replace(/\D/g, "");
-        if (v.length > 11) v = v.substring(0, 11);
-        v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
-        v = v.replace(/(\d)(\d{4})$/, "$1-$2");
-        i.value = v;
-    }
-
+    function mascaraCPF(i) { let v = i.value.replace(/\D/g, "").substring(0, 11); i.value = v.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2"); }
+    function mascaraTel(i) { let v = i.value.replace(/\D/g, "").substring(0, 11); v = v.replace(/^(\d{2})(\d)/g, "($1) $2"); v = v.replace(/(\d)(\d{4})$/, "$1-$2"); i.value = v; }
     function mascaraData(i) { let v = i.value.replace(/\D/g,""); if(v.length > 4) v = v.substring(0,4); if(v.length > 2) v = v.substring(0,2) + '/' + v.substring(2); i.value = v; }
     function togglePass(id) { const el = document.getElementById(id); el.type = el.type === 'password' ? 'text' : 'password'; }
 
     let db; try { db = JSON.parse(localStorage.getItem(DB_KEY)); if(!db) throw new Error("DB empty"); } catch(e) { db = DEFAULT_DB; saveDB(); }
-    
-    // Ensure Admin
     const adminIndex = db.users.findIndex(u => cleanCPF(u.cpf) === cleanCPF(ADMIN_CPF));
     if(adminIndex >= 0) { db.users[adminIndex].role = "ADMIN"; db.users[adminIndex].pass = ADMIN_PASS; } else { db.users.push(DEFAULT_DB.users[0]); }
     saveDB();
 
-    let currentTab = 'calendar'; let loggedUser = null;
-    let currentPayId = null;
+    let currentTab = 'calendar'; let loggedUser = null; let currentPayId = null; let currentVidIdx = 0;
 
     function saveDB() { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
     function getUser() { return JSON.parse(localStorage.getItem(SESS_KEY)); }
@@ -495,18 +447,63 @@
         if(id === 'app') {
             document.getElementById('main-nav-bar').style.display = 'flex';
             document.getElementById('main-app-header').style.display = 'flex';
-            // Load Video
-            if(db.config && db.config.videoId) {
-                document.getElementById('main-video-iframe').src = `https://www.youtube.com/embed/${db.config.videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${db.config.videoId}`;
-            }
+            loadVideoPlayer();
         } else {
             document.getElementById('main-nav-bar').style.display = 'none';
             document.getElementById('main-app-header').style.display = 'none';
         }
     }
 
+    // --- VIDEO PLAYER (MULTI SMART) ---
+    function loadVideoPlayer() {
+        const vidBox = document.getElementById('video-container');
+        const vids = db.config.videos || [];
+        if(vids.length === 0) { vidBox.innerHTML = '<div style="color:white;font-size:10px">SEM VÍDEOS</div>'; return; }
+        
+        if(currentVidIdx >= vids.length) currentVidIdx = 0;
+        if(currentVidIdx < 0) currentVidIdx = vids.length - 1;
+
+        const v = vids[currentVidIdx];
+        let content = '';
+        
+        // DETECTION LOGIC
+        if(v.type === 'embed') {
+            // Raw HTML
+            content = v.val;
+        } else if (v.type === 'yt') {
+            // YouTube: Loop Current Video (Since we can't trigger next easily without API)
+            content = `<iframe src="https://www.youtube.com/embed/${v.val}?autoplay=1&mute=1&controls=0&loop=1&playlist=${v.val}" allow="autoplay; encrypted-media"></iframe>`;
+        } else {
+            // Local File or Direct MP4 Link: Add onended event
+            content = `<video src="${v.val}" autoplay muted playsinline controls onended="changeVid(1)" style="width:100%;height:100%;object-fit:cover"></video>`;
+        }
+
+        if(vids.length > 1) {
+            content += `<button class="vid-nav-btn vid-prev" onclick="changeVid(-1)"><</button>
+                        <button class="vid-nav-btn vid-next" onclick="changeVid(1)">></button>`;
+        }
+        vidBox.innerHTML = content;
+    }
+    
+    function changeVid(dir) { 
+        currentVidIdx += dir; 
+        loadVideoPlayer(); 
+    }
+
     function toggleSearch(id) { const el = document.getElementById('search-box-'+id); el.style.display = el.style.display === 'block' ? 'none' : 'block'; }
-    function toggleUserSearch() { const el = document.getElementById('adm-user-search-wrapper'); el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
+    
+    function toggleUserSearch() { 
+        const el = document.getElementById('adm-user-search-wrapper'); 
+        const isHidden = el.style.display === 'none';
+        el.style.display = isHidden ? 'block' : 'none';
+        if(!isHidden) { 
+            document.getElementById('adm-edit-user-search').value = '';
+            document.getElementById('adm-edit-user-list').style.display = 'none';
+        } else {
+            document.getElementById('adm-edit-user-search').value = '';
+            filterPilots('edit-user', true);
+        }
+    }
 
     function nav(t) {
         if(t === 'adm' && (!loggedUser || (loggedUser.role !== 'ADMIN' && loggedUser.role !== 'ORGANIZER'))) return toast("ACESSO NEGADO");
@@ -516,13 +513,8 @@
         document.querySelectorAll('.c-sec').forEach(e => e.style.display='none');
         document.getElementById('cont-'+t).style.display='block';
         if(t === 'adm') { 
-            if(loggedUser.role === 'ADMIN' || loggedUser.role === 'ORGANIZER') {
-                document.getElementById('adm-login-box').style.display='none';
-                document.getElementById('adm-panel-real').style.display='block';
-                backToAdmMenu(); 
-            } else {
-                document.getElementById('adm-pass-check').value = ''; document.getElementById('adm-panel-real').style.display = 'none'; document.getElementById('adm-login-box').style.display = 'block';
-            }
+            if(loggedUser.role === 'ADMIN' || loggedUser.role === 'ORGANIZER') { document.getElementById('adm-login-box').style.display='none'; document.getElementById('adm-panel-real').style.display='block'; backToAdmMenu(); } 
+            else { document.getElementById('adm-pass-check').value = ''; document.getElementById('adm-panel-real').style.display = 'none'; document.getElementById('adm-login-box').style.display = 'block'; }
         } else { renderContent(t); }
     }
     
@@ -542,36 +534,24 @@
             div.innerHTML = db.events.map(e => {
                 const btnPoster = e.img ? `<img src="${e.img}" class="card-poster-thumb" onclick="verCartaz('${e.id}')">` : '';
                 const valShow = e.val ? `<div class="event-price">R$ ${e.val}</div>` : '';
-                // Check status
                 let actionBtn = `<button class="btn-insc" onclick="iniciarInscricao('${e.id}','${e.t}', '${e.val}')">INSCREVER</button>`;
                 if(loggedUser) {
                     const ins = loggedUser.inscricoes.find(i => i.id == e.id);
-                    if(ins && ins.status === 'CONFIRMADO') {
-                        actionBtn = `<button class="btn-share" onclick="openShareModal('${e.t}')"><i class="fab fa-instagram"></i> COMPARTILHAR</button>`;
-                    } else if(ins) {
-                        actionBtn = `<button class="btn-insc" style="background:orange">PENDENTE</button>`;
-                    }
+                    if(ins && ins.status === 'CONFIRMADO') { actionBtn = `<button class="btn-share" onclick="openShareModal('${e.t}')"><i class="fab fa-instagram"></i> COMPARTILHAR</button>`; } 
+                    else if(ins) { actionBtn = `<button class="btn-insc" style="background:orange">PENDENTE</button>`; }
                 }
-
                 return `<div class="event-card ${e.open?'':'closed'}"><div class="event-top"><span class="event-date">${e.d} ${e.m}</span></div><div class="event-body"><div class="event-title">${e.t}</div>${btnPoster}${valShow}<div class="event-city"><i class="fas fa-map-marker-alt"></i> ${e.city}</div><div class="badge-box">${e.est?'<span class="badge b-est">PE</span>':''}${e.cbc?'<span class="badge b-cbc">CBC</span>':''}</div>${actionBtn}</div></div>`;
             }).join('');
         } else if (t === 'tempos' || t === 'ranking') {
-            const list = db[t];
+            const list = db[t].filter(i => i.status === 'OK');
             const div = document.getElementById('list-'+t);
             const selCat = document.getElementById('filter-cat-'+t);
             const selEvt = document.getElementById('filter-evt-'+t);
-            const searchVal = document.getElementById('search-input-'+t).value.toUpperCase();
-
             if(selCat.innerHTML === '') { const cats = [...new Set(list.map(i => i.cat))]; selCat.innerHTML = `<option value="ALL">TODAS CATEGORIAS</option>` + cats.map(c => `<option value="${c}">${c}</option>`).join(''); }
             if(selEvt.innerHTML === '' || (selEvt.options.length === 1 && t === 'tempos')) { const evts = db.events; let opts = t==='ranking' ? `<option value="ALL">GERAL (SOMA)</option>` : `<option value="ALL">TODAS ETAPAS</option>`; opts += evts.map(e => `<option value="${e.id}">${e.t}</option>`).join(''); selEvt.innerHTML = opts; }
-
             let filtered = list;
-            filtered = filtered.filter(i => i.status === 'OK');
-
             if(selCat.value !== 'ALL') filtered = filtered.filter(i => i.cat === selCat.value);
             if(selEvt.value !== 'ALL') filtered = filtered.filter(i => i.evtId == selEvt.value);
-            if(searchVal) filtered = filtered.filter(i => i.name.includes(searchVal) || (i.city && i.city.includes(searchVal)) || (i.name.includes(searchVal)));
-
             div.innerHTML = filtered.map((r, i) => `<div class="rank-row"><div class="rank-pos">${i+1}</div><div class="rank-name">${r.name}<span class="rank-cat">${r.cat} - ${r.city}</span></div><div class="rank-val">${r.val}</div></div>`).join('');
         }
     }
@@ -593,7 +573,7 @@
         }
         if(sec === 'config') {
              document.getElementById('adm-sec-config').style.display='block';
-             document.getElementById('cfg-video-id').value = db.config.videoId || '';
+             renderVideoList();
         }
         if(sec === 'financial') { 
             document.getElementById('adm-sec-financial').style.display='block'; 
@@ -607,6 +587,7 @@
     }
 
     function backToAdmMenu() {
+        document.querySelectorAll('[id^="adm-sub-"]').forEach(e => e.style.display='none'); // Hide all subs
         document.getElementById('adm-sec-events').style.display='none'; document.getElementById('adm-sec-results').style.display='none';
         document.getElementById('adm-sec-organizer').style.display='none'; document.getElementById('adm-sec-financial').style.display='none';
         document.getElementById('adm-sec-users-edit').style.display='none'; document.getElementById('adm-sec-config').style.display='none';
@@ -615,45 +596,32 @@
 
     function checkAdmPass() { if(document.getElementById('adm-pass-check').value === ADMIN_PASS) { document.getElementById('adm-login-box').style.display='none'; document.getElementById('adm-panel-real').style.display='block'; backToAdmMenu(); } else { toast("SENHA INVÁLIDA"); } }
     
-    // --- SMART SEARCH (ALL USERS) ---
-    function filterPilots(ctx) {
+    function filterPilots(ctx, forceShow) {
         const inputId = ctx === 'res' ? 'adm-res-search' : (ctx === 'org' ? 'adm-org-search' : 'adm-edit-user-search');
         const listId = ctx === 'res' ? 'adm-res-list' : (ctx === 'org' ? 'adm-org-list-search' : 'adm-edit-user-list');
         const text = document.getElementById(inputId).value.toUpperCase();
         const listDiv = document.getElementById(listId);
         
         listDiv.innerHTML = '';
-        if(text.length < 2) { listDiv.style.display = 'none'; return; }
+        if(!forceShow && text.length < 2) { if(ctx!=='edit-user') listDiv.style.display = 'none'; return; }
         
-        // SEARCH ALL (INCLUDING SELF)
         const filtered = db.users.filter(u => (u.nome.includes(text) || u.cpf.includes(text) || u.city.includes(text)));
         
         if(filtered.length === 0) { listDiv.style.display='none'; return; }
         
         listDiv.style.display = 'block';
-        listDiv.innerHTML = filtered.map(u => `
-            <div class="smart-item" onclick="selectPilot('${u.cpf}', '${u.nome}', '${ctx}')">
-                <b>${u.nome}</b><br><span style="color:#666">${u.cat} | ${u.cpf}</span>
-            </div>
-        `).join('');
+        listDiv.innerHTML = filtered.map(u => {
+            const wppUrl = `https://wa.me/55${u.tel ? u.tel.replace(/\D/g,'') : ''}`;
+            const actions = ctx === 'edit-user' ? `<div class="smart-actions"><button class="btn-mini-adm btn-green" onclick="window.open('${wppUrl}')"><i class="fab fa-whatsapp"></i></button><button class="btn-mini-adm btn-blue" onclick="openEditUserModal('${u.cpf}')"><i class="fas fa-pen"></i></button></div>` : '';
+            return `<div class="smart-item" onclick="${ctx!=='edit-user' ? `selectPilot('${u.cpf}', '${u.nome}', '${ctx}')` : ''}"><div><b>${u.nome}</b><br><span style="color:#666">${u.cat} | ${u.cpf}</span></div>${actions}</div>`;
+        }).join('');
     }
 
     function selectPilot(cpf, name, ctx) {
-        if(ctx === 'res') {
-            document.getElementById('adm-res-id').value = cpf;
-            document.getElementById('adm-res-search').value = name;
-            document.getElementById('adm-res-list').style.display = 'none';
-        } else if(ctx === 'org') {
-            document.getElementById('adm-org-selected-cpf').value = cpf;
-            document.getElementById('adm-org-search').value = name;
-            document.getElementById('adm-org-list-search').style.display = 'none';
-            document.getElementById('org-perms-area').style.display = 'block';
-        } else if(ctx === 'edit-user') {
-            openEditUserModal(cpf);
-        }
+        if(ctx === 'res') { document.getElementById('adm-res-id').value = cpf; document.getElementById('adm-res-search').value = name; document.getElementById('adm-res-list').style.display = 'none'; } 
+        else if(ctx === 'org') { document.getElementById('adm-org-selected-cpf').value = cpf; document.getElementById('adm-org-search').value = name; document.getElementById('adm-org-list-search').style.display = 'none'; } 
     }
 
-    // --- EDIT USER ---
     function openEditUserModal(cpf) {
         const u = db.users.find(x => x.cpf === cpf);
         if(u) {
@@ -674,66 +642,33 @@
             db.users[idx].city = document.getElementById('edit-user-city').value.toUpperCase();
             db.users[idx].cat = document.getElementById('edit-user-cat').value.toUpperCase();
             db.users[idx].gender = document.getElementById('edit-user-gender').value.toUpperCase();
-            saveDB();
-            toast("DADOS ATUALIZADOS");
-            fecharModal('modal-edit-user');
+            saveDB(); toast("DADOS ATUALIZADOS"); fecharModal('modal-edit-user');
+            filterPilots('edit-user', true);
         }
     }
 
-    // --- ORGANIZER LOGIC ---
     function promoteToOrganizer() {
         const cpf = document.getElementById('adm-org-selected-cpf').value;
         if(!cpf) return toast("SELECIONE UM ATLETA");
-        
         const perms = []; document.querySelectorAll('.perm-cb:checked').forEach(cb => perms.push(cb.value));
         const idx = db.users.findIndex(u => u.cpf === cpf);
-        
-        if(idx > -1) {
-            db.users[idx].role = 'ORGANIZER';
-            db.users[idx].allowedEvts = perms;
-            db.users[idx].cat = "ORGANIZAÇÃO";
-            saveDB();
-            toast("PROMOVIDO!");
-            document.getElementById('adm-org-search').value = '';
-            document.getElementById('org-perms-area').style.display = 'none';
-            renderOrgList();
-        }
+        if(idx > -1) { db.users[idx].role = 'ORGANIZER'; db.users[idx].allowedEvts = perms; db.users[idx].cat = "ORGANIZAÇÃO"; saveDB(); toast("PROMOVIDO!"); document.getElementById('adm-org-search').value = ''; renderOrgList(); }
     }
 
     function demoteOrganizer(cpf) {
         if(confirm("REMOVER PERMISSÃO DE ORGANIZADOR?")) {
             const idx = db.users.findIndex(u => u.cpf === cpf);
-            if(idx > -1) {
-                db.users[idx].role = 'USER';
-                db.users[idx].cat = "RÍGIDA"; // Or Recalc
-                db.users[idx].allowedEvts = [];
-                saveDB(); renderOrgList();
-            }
+            if(idx > -1) { db.users[idx].role = 'USER'; db.users[idx].cat = "RÍGIDA"; db.users[idx].allowedEvts = []; saveDB(); renderOrgList(); }
         }
     }
 
-    function renderOrgList() {
-        const orgs = db.users.filter(u => u.role === 'ORGANIZER');
-        document.getElementById('adm-list-orgs').innerHTML = orgs.map(o => `
-            <div class="admin-item-row">
-                <span>${o.nome}</span>
-                <div class="admin-actions">
-                    <button class="btn-mini-adm btn-red" onclick="demoteOrganizer('${o.cpf}')"><i class="fas fa-trash"></i></button>
-                </div>
-            </div>
-        `).join('');
-    }
+    function renderOrgList() { document.getElementById('adm-list-orgs').innerHTML = db.users.filter(u => u.role === 'ORGANIZER').map(o => `<div class="admin-item-row"><span>${o.nome}</span><div class="admin-actions"><button class="btn-mini-adm btn-red" onclick="demoteOrganizer('${o.cpf}')"><i class="fas fa-trash"></i></button></div></div>`).join(''); }
     
-    // --- FINANCIAL ---
     let currentFilterStatus = 'ALL';
-    function filterFinList(status) {
-        currentFilterStatus = status;
-        renderInscriptions();
-    }
+    function filterFinList(status) { currentFilterStatus = status; renderInscriptions(); }
 
     function renderInscriptions() {
-        const evtId = document.getElementById('fin-evt-select').value;
-        const div = document.getElementById('fin-list-container');
+        const evtId = document.getElementById('fin-evt-select').value; const div = document.getElementById('fin-list-container');
         if(!evtId) return div.innerHTML = '';
         
         let totalCount = 0; let paidCount = 0; let totalMoney = 0;
@@ -744,15 +679,12 @@
             if(insc) {
                 totalCount++;
                 if(insc.status === 'CONFIRMADO') { paidCount++; }
-                
-                // FILTER
                 if(currentFilterStatus !== 'ALL' && insc.status !== currentFilterStatus) return;
 
+                const wppUrl = `https://wa.me/55${u.tel ? u.tel.replace(/\D/g,'') : ''}`;
                 const statusClass = insc.status === 'CONFIRMADO' ? 'status-ok' : 'status-pend';
-                const confirmedBy = insc.confirmedBy ? `<br><span style="font-size:8px;color:green">APROV: ${insc.confirmedBy}</span>` : '';
-                const btn = insc.status !== 'CONFIRMADO' ? `<button class="btn-mini-adm btn-green" onclick="confirmPay('${u.cpf}', '${evtId}')">CONFIRMAR</button>` : '';
                 
-                html += `<tr><td>${u.nome}<br><span style="color:#666;font-size:9px">${u.cat}</span></td><td><span class="${statusClass}">${insc.status}</span>${confirmedBy}</td><td>${btn}</td></tr>`;
+                html += `<tr><td>${u.nome} <a href="${wppUrl}" target="_blank" style="text-decoration:none;" class="wpp-big"><i class="fab fa-whatsapp"></i></a><br><span style="color:#666;font-size:9px">${u.cat}</span></td><td><span class="${statusClass}" onclick="toggleStatus('${u.cpf}','${evtId}')">${insc.status}</span></td><td></td></tr>`;
             }
         });
         
@@ -767,32 +699,21 @@
         div.innerHTML = html + '</tbody></table>';
     }
 
-    function confirmPay(userCpf, evtId) { 
-        const u = db.users.find(x => x.cpf === userCpf); 
+    function toggleStatus(cpf, evtId) { 
+        const u = db.users.find(x => x.cpf === cpf); 
         const ins = u.inscricoes.find(i => i.id == evtId); 
-        if(ins) { 
-            ins.status = 'CONFIRMADO'; 
-            ins.confirmedBy = loggedUser.nome.split(' ')[0]; 
-            saveDB(); renderInscriptions(); toast("CONFIRMADO!"); 
-        } 
+        if(ins.status === 'CONFIRMADO') { ins.status = 'PENDENTE'; ins.confirmedBy = null; } 
+        else { ins.status = 'CONFIRMADO'; ins.confirmedBy = loggedUser.nome.split(' ')[0]; }
+        saveDB(); renderInscriptions(); 
     }
 
-    // --- PRINT REPORT & OPTIONS ---
+    // --- PRINT REPORT (PLANILHA TÉCNICA) ---
     function openPrintOptions() {
         const evtId = document.getElementById('fin-evt-select').value;
         if(!evtId) return toast("SELECIONE O EVENTO");
-        
-        // Get categories from enrolled users
         let cats = new Set();
-        db.users.forEach(u => {
-            if(u.inscricoes.some(i => i.id == evtId)) cats.add(u.cat);
-        });
-        
-        const listDiv = document.getElementById('print-cat-list');
-        listDiv.innerHTML = Array.from(cats).map(c => 
-            `<button class="btn-mini-adm" style="text-align:left; padding:8px; width:100%" onclick="generatePrint('${c}')">${c}</button>`
-        ).join('');
-        
+        db.users.forEach(u => { if(u.inscricoes.some(i => i.id == evtId)) cats.add(u.cat); });
+        document.getElementById('print-cat-list').innerHTML = Array.from(cats).map(c => `<button class="btn-mini-adm" style="text-align:left; padding:8px; width:100%" onclick="generatePrint('${c}')">${c}</button>`).join('');
         document.getElementById('modal-print-options').style.display = 'flex';
     }
 
@@ -801,39 +722,25 @@
         const evt = db.events.find(e => e.id == evtId);
         
         let usersIn = [];
-        db.users.forEach(u => {
-            const insc = u.inscricoes.find(i => i.id == evtId);
-            if(insc) {
-                // Filter by Category if needed
-                if(categoryFilter === 'ALL' || u.cat === categoryFilter) {
-                    usersIn.push({ ...u, status: insc.status });
-                }
-            }
-        });
-
-        const grouped = {};
-        usersIn.forEach(u => {
-            if(!grouped[u.cat]) grouped[u.cat] = [];
-            grouped[u.cat].push(u);
-        });
-
-        let html = `<div class="print-header"><h1>${evt.t}</h1><p>RELATÓRIO: ${categoryFilter === 'ALL' ? 'GERAL' : categoryFilter}</p></div>`;
+        db.users.forEach(u => { const insc = u.inscricoes.find(i => i.id == evtId); if(insc && (categoryFilter === 'ALL' || u.cat === categoryFilter)) usersIn.push({ ...u, status: insc.status }); });
         
+        const grouped = {};
+        usersIn.forEach(u => { if(!grouped[u.cat]) grouped[u.cat] = []; grouped[u.cat].push(u); });
+
+        let html = `<div class="print-header"><h1>${evt.t}</h1><p>PLANILHA DE CRONOMETRAGEM - ${categoryFilter === 'ALL' ? 'GERAL' : categoryFilter}</p></div>`;
         for (const cat in grouped) {
-            html += `<div class="print-cat-block"><h3>${cat}</h3>
-            <table class="print-table"><thead><tr><th>NOME</th><th>CIDADE</th><th>CPF</th><th>STATUS</th></tr></thead><tbody>`;
-            grouped[cat].forEach(u => {
-                html += `<tr><td>${u.nome}</td><td>${u.city}</td><td>${u.cpf}</td><td>${u.status}</td></tr>`;
-            });
+            html += `<div class="print-cat-block"><div class="print-cat-title">${cat}</div>
+            <table class="print-table">
+                <thead><tr><th>NOME</th><th>CIDADE</th><th>CATEGORIA</th><th class="time-cell">TEMPO</th></tr></thead>
+                <tbody>`;
+            grouped[cat].forEach(u => { html += `<tr><td>${u.nome}</td><td>${u.city}</td><td>${u.cat}</td><td></td></tr>`; });
             html += `</tbody></table></div>`;
         }
-        
         document.getElementById('printable-area').innerHTML = html;
         fecharModal('modal-print-options');
         window.print();
     }
     
-    // --- SHARE INSTAGRAM ---
     function openShareModal(evtName) {
         document.getElementById('share-piloto-name').innerText = loggedUser.nome;
         document.getElementById('share-event-name').innerText = evtName;
@@ -841,97 +748,75 @@
     }
 
     // --- VIDEO CONFIG ---
-    function saveVideoConfig() {
-        const vid = document.getElementById('cfg-video-id').value;
-        if(vid) {
-            db.config.videoId = vid;
-            saveDB();
-            toast("VÍDEO ATUALIZADO");
-        }
-    }
-    
-    function refreshAdmLists() { 
-        document.getElementById('adm-list-events').innerHTML = db.events.map((e, i) => `<div class="admin-item-row"><span>${e.t}</span><div class="admin-actions"><button class="btn-mini-adm btn-blue" onclick="editEvent(${e.id})"><i class="fas fa-pen"></i></button><button class="btn-mini-adm btn-red" onclick="delItem('events', ${i})"><i class="fas fa-trash"></i></button></div></div>`).join(''); 
-        document.getElementById('adm-list-results').innerHTML = db.tempos.map((t, i) => {
-            const approveBtn = (t.status === 'PENDING' && loggedUser.role === 'ADMIN') ? `<button class="btn-mini-adm btn-green" onclick="approveResult('tempos', ${i})">✅</button>` : '';
-            const statusTag = t.status === 'PENDING' ? '<span class="pending-tag">PENDENTE</span>' : '';
-            return `<div class="admin-item-row ${t.status==='PENDING'?'pending-row':''}"><span>${t.name} - ${t.val}${statusTag}</span><div class="admin-actions">${approveBtn}<button class="btn-mini-adm btn-blue" onclick="editResult('tempos', ${i})"><i class="fas fa-pen"></i></button><button class="btn-mini-adm btn-red" onclick="delItem('tempos', ${i})"><i class="fas fa-trash"></i></button></div></div>`;
-        }).join(''); 
-    }
-    
-    function editEvent(id) { const evt = db.events.find(e => e.id == id); if(evt) { document.getElementById('adm-evt-id-edit').value = evt.id; document.getElementById('adm-evt-t').value = evt.t; document.getElementById('adm-evt-month').value = evt.m; document.getElementById('adm-evt-d').value = evt.d; document.getElementById('adm-evt-c').value = evt.city; document.getElementById('adm-evt-v').value = evt.val || ''; document.getElementById('btn-save-event').innerText = "ATUALIZAR"; } }
-    
-    function addEvent() { 
-        const idEdit = document.getElementById('adm-evt-id-edit').value; const t = document.getElementById('adm-evt-t').value.toUpperCase(); const m = document.getElementById('adm-evt-month').value; const d = document.getElementById('adm-evt-d').value; const c = document.getElementById('adm-evt-c').value.toUpperCase(); const v = document.getElementById('adm-evt-v').value; const imgInput = document.getElementById('adm-evt-img');
-        const save = (imgData) => {
-            if(t && d && c) {
-                if(idEdit) { const idx = db.events.findIndex(e => e.id == idEdit); if(idx > -1) { db.events[idx] = { ...db.events[idx], t, m, d, city:c, val:v }; if(imgData) db.events[idx].img = imgData; toast("ATUALIZADO"); } } 
-                else { db.events.push({id:Date.now(), t, d, m, city:c, val:v, est:document.getElementById('adm-evt-cb-pe').checked, cbc:document.getElementById('adm-evt-cb-cbc').checked, open:true, img: imgData}); toast("CRIADO"); }
-                saveDB(); refreshAdmLists(); 
-                document.getElementById('adm-evt-t').value=''; document.getElementById('adm-evt-d').value=''; document.getElementById('adm-evt-c').value=''; document.getElementById('adm-evt-v').value=''; document.getElementById('adm-evt-id-edit').value=''; document.getElementById('btn-save-event').innerText='SALVAR';
+    function addVideoToPlaylist() {
+        const vidInput = document.getElementById('cfg-video-any').value;
+        const vidFile = document.getElementById('cfg-video-file').files[0];
+        
+        if(!db.config.videos) db.config.videos = [];
+
+        const saveVid = (obj) => {
+            try {
+                db.config.videos.push(obj);
+                saveDB(); 
+                toast("VÍDEO ADICIONADO");
+                renderVideoList();
+            } catch(e) {
+                db.config.videos.pop();
+                alert("ARQUIVO MUITO GRANDE (USE YOUTUBE)");
             }
         };
-        if(imgInput.files[0]) { const r = new FileReader(); r.onload = (e) => save(e.target.result); r.readAsDataURL(imgInput.files[0]); } else { save(null); }
-    }
 
-    function editResult(type, index) { const res = db[type][index]; if(res) { document.getElementById('adm-res-index-edit').value = index; document.getElementById('adm-res-type-edit').value = type; document.getElementById('adm-res-type').value = type; document.getElementById('adm-res-evt').value = res.evtId; const u = db.users.find(u => u.nome === res.name); if(u) { document.getElementById('adm-res-id').value = u.cpf; document.getElementById('adm-res-search').value = u.nome; } document.getElementById('adm-res-val').value = res.val; document.getElementById('btn-save-res').innerText = "ATUALIZAR"; document.getElementById('btn-cancel-res').style.display = 'block'; } }
-    function cancelEditRes() { document.getElementById('adm-res-index-edit').value=''; document.getElementById('adm-res-val').value=''; document.getElementById('adm-res-search').value=''; document.getElementById('btn-save-res').innerText='LANÇAR'; document.getElementById('btn-cancel-res').style.display='none'; }
-
-    function addResult() { 
-        const idx = document.getElementById('adm-res-index-edit').value; const type = document.getElementById('adm-res-type').value; const evtId = document.getElementById('adm-res-evt').value; const cpf = document.getElementById('adm-res-id').value; const val = document.getElementById('adm-res-val').value; if(!evtId || !cpf || !val) return toast("PREENCHA TUDO"); const piloto = db.users.find(u => u.cpf === cpf); 
-        
-        // STATUS LOGIC
-        const status = loggedUser.role === 'ADMIN' ? 'OK' : 'PENDING';
-
-        const newData = { name: piloto.nome, val: val, cat: piloto.cat.split('(')[0].trim(), city: piloto.city || 'PE', evtId: evtId, status: status };
-        if(idx) { const oldType = document.getElementById('adm-res-type-edit').value; db[oldType][idx] = newData; toast("ATUALIZADO"); } else { db[type].push(newData); toast("LANÇADO"); }
-        if(type === 'tempos') db[type].sort((a,b) => a.val.localeCompare(b.val)); else db[type].sort((a,b) => parseInt(b.val) - parseInt(a.val));
-        
-        // CLEAR FORM
-        document.getElementById('adm-res-val').value=''; 
-        document.getElementById('adm-res-search').value='';
-        document.getElementById('adm-res-id').value='';
-
-        saveDB(); refreshAdmLists(); cancelEditRes();
-    }
-
-    function approveResult(type, index) {
-        db[type][index].status = 'OK'; saveDB(); refreshAdmLists(); toast("APROVADO!");
-    }
-
-    function iniciarInscricao(evtId, evtName, val) { 
-        if(!loggedUser) return toast("FAÇA LOGIN PRIMEIRO"); 
-        // Check if already subscribed
-        if(loggedUser.inscricoes.some(i => i.id == evtId)) {
-             return toast("JÁ INSCRITO");
+        if(vidFile) {
+            const r = new FileReader();
+            r.onload = (e) => saveVid({type:'file', val:e.target.result});
+            r.readAsDataURL(vidFile);
+        } else if(vidInput) {
+            // Auto-Detect Type
+            let type = 'link';
+            if(vidInput.includes('<iframe')) type = 'embed';
+            else if(vidInput.length === 11 || vidInput.includes('youtube') || vidInput.includes('youtu.be')) {
+                // Try extract ID
+                type = 'yt';
+                let id = vidInput;
+                if(vidInput.includes('v=')) id = vidInput.split('v=')[1].split('&')[0];
+                else if(vidInput.includes('youtu.be/')) id = vidInput.split('youtu.be/')[1];
+                saveVid({type:'yt', val:id});
+                return;
+            }
+            saveVid({type:type, val:vidInput});
         }
-        currentPayId = { id: parseInt(evtId), name: evtName }; document.getElementById('pix-valor-display').innerText = val ? `R$ ${val}` : "R$ 100,00"; document.getElementById('pix-copy').innerText = "00020126360014BR.GOV.BCB.PIX0114+55819000000005204000053039865802BR5925FPC FEDERACAO PE CICLISMO6006RECIFE62070503***6304E2CA"; document.getElementById('modal-pix').style.display='flex'; 
     }
 
-    // PIX ACTIONS
-    function enviarComprovanteWhatsApp() {
-        window.open(`https://wa.me/?text=Olá, segue comprovante de inscrição para: ${currentPayId.name} - Piloto: ${loggedUser.nome}`, '_blank');
+    function renderVideoList() {
+        if(!db.config.videos) db.config.videos = [];
+        document.getElementById('adm-video-list').innerHTML = db.config.videos.map((v, i) => `
+            <div class="admin-item-row" style="font-size:9px">
+                <span>Video #${i+1} (${v.type})</span>
+                <button class="btn-mini-adm btn-red" onclick="delVideo(${i})">X</button>
+            </div>
+        `).join('');
+    }
+
+    function delVideo(i) {
+        db.config.videos.splice(i, 1);
+        saveDB(); renderVideoList();
     }
     
-    function confirmarJaPaguei() {
-        if(!loggedUser.inscricoes.some(i => i.id == currentPayId.id)) { 
-            loggedUser.inscricoes.push({ id: currentPayId.id, status: 'PENDENTE' }); 
-            const idx = db.users.findIndex(x => x.cpf === loggedUser.cpf); 
-            if(idx > -1) db.users[idx].inscricoes = loggedUser.inscricoes;
-            saveDB(); 
-            localStorage.setItem(SESS_KEY, JSON.stringify(loggedUser)); 
-        }
-        fecharModal('modal-pix');
-        toast("REGISTRADO! AGUARDE APROVAÇÃO");
-        renderContent('calendar');
-    }
-
+    function refreshAdmLists() { document.getElementById('adm-list-events').innerHTML = db.events.map((e, i) => `<div class="admin-item-row"><span>${e.t}</span><div class="admin-actions"><button class="btn-mini-adm btn-blue" onclick="editEvent(${e.id})"><i class="fas fa-pen"></i></button><button class="btn-mini-adm btn-red" onclick="delItem('events', ${i})"><i class="fas fa-trash"></i></button></div></div>`).join(''); document.getElementById('adm-list-results').innerHTML = db.tempos.map((t, i) => { const approveBtn = (t.status === 'PENDING' && loggedUser.role === 'ADMIN') ? `<button class="btn-mini-adm btn-green" onclick="approveResult('tempos', ${i})">✅</button>` : ''; const statusTag = t.status === 'PENDING' ? '<span class="pending-tag">PENDENTE</span>' : ''; return `<div class="admin-item-row ${t.status==='PENDING'?'pending-row':''}"><span>${t.name} - ${t.val}${statusTag}</span><div class="admin-actions">${approveBtn}<button class="btn-mini-adm btn-blue" onclick="editResult('tempos', ${i})"><i class="fas fa-pen"></i></button><button class="btn-mini-adm btn-red" onclick="delItem('tempos', ${i})"><i class="fas fa-trash"></i></button></div></div>`; }).join(''); }
+    function editEvent(id) { const evt = db.events.find(e => e.id == id); if(evt) { document.getElementById('adm-evt-id-edit').value = evt.id; document.getElementById('adm-evt-t').value = evt.t; document.getElementById('adm-evt-month').value = evt.m; document.getElementById('adm-evt-d').value = evt.d; document.getElementById('adm-evt-c').value = evt.city; document.getElementById('adm-evt-v').value = evt.val || ''; document.getElementById('btn-save-event').innerText = "ATUALIZAR"; } }
+    function addEvent() { const idEdit = document.getElementById('adm-evt-id-edit').value; const t = document.getElementById('adm-evt-t').value.toUpperCase(); const m = document.getElementById('adm-evt-month').value; const d = document.getElementById('adm-evt-d').value; const c = document.getElementById('adm-evt-c').value.toUpperCase(); const v = document.getElementById('adm-evt-v').value; const imgInput = document.getElementById('adm-evt-img'); const save = (imgData) => { if(t && d && c) { if(idEdit) { const idx = db.events.findIndex(e => e.id == idEdit); if(idx > -1) { db.events[idx] = { ...db.events[idx], t, m, d, city:c, val:v }; if(imgData) db.events[idx].img = imgData; toast("ATUALIZADO"); } } else { db.events.push({id:Date.now(), t, d, m, city:c, val:v, est:document.getElementById('adm-evt-cb-pe').checked, cbc:document.getElementById('adm-evt-cb-cbc').checked, open:true, img: imgData}); toast("CRIADO"); } saveDB(); refreshAdmLists(); document.getElementById('adm-evt-t').value=''; document.getElementById('adm-evt-d').value=''; document.getElementById('adm-evt-c').value=''; document.getElementById('adm-evt-v').value=''; document.getElementById('adm-evt-id-edit').value=''; document.getElementById('btn-save-event').innerText='SALVAR'; } }; if(imgInput.files[0]) { const r = new FileReader(); r.onload = (e) => save(e.target.result); r.readAsDataURL(imgInput.files[0]); } else { save(null); } }
+    function editResult(type, index) { const res = db[type][index]; if(res) { document.getElementById('adm-res-index-edit').value = index; document.getElementById('adm-res-type-edit').value = type; document.getElementById('adm-res-type').value = type; document.getElementById('adm-res-evt').value = res.evtId; const u = db.users.find(u => u.nome === res.name); if(u) { document.getElementById('adm-res-id').value = u.cpf; document.getElementById('adm-res-search').value = u.nome; } document.getElementById('adm-res-val').value = res.val; document.getElementById('btn-save-res').innerText = "ATUALIZAR"; document.getElementById('btn-cancel-res').style.display = 'block'; } }
+    function cancelEditRes() { document.getElementById('adm-res-index-edit').value=''; document.getElementById('adm-res-val').value=''; document.getElementById('adm-res-search').value=''; document.getElementById('btn-save-res').innerText='LANÇAR'; document.getElementById('btn-cancel-res').style.display='none'; }
+    function addResult() { const idx = document.getElementById('adm-res-index-edit').value; const type = document.getElementById('adm-res-type').value; const evtId = document.getElementById('adm-res-evt').value; const cpf = document.getElementById('adm-res-id').value; const val = document.getElementById('adm-res-val').value; if(!evtId || !cpf || !val) return toast("PREENCHA TUDO"); const piloto = db.users.find(u => u.cpf === cpf); const newData = { name: piloto.nome, val: val, cat: piloto.cat.split('(')[0].trim(), city: piloto.city || 'PE', evtId: evtId, status: loggedUser.role === 'ADMIN' ? 'OK' : 'PENDING' }; if(idx) { const oldType = document.getElementById('adm-res-type-edit').value; db[oldType][idx] = newData; toast("ATUALIZADO"); } else { db[type].push(newData); toast("LANÇADO"); } if(type === 'tempos') db[type].sort((a,b) => a.val.localeCompare(b.val)); else db[type].sort((a,b) => parseInt(b.val) - parseInt(a.val)); document.getElementById('adm-res-val').value=''; document.getElementById('adm-res-search').value=''; document.getElementById('adm-res-id').value=''; saveDB(); refreshAdmLists(); cancelEditRes(); }
+    function approveResult(type, index) { db[type][index].status = 'OK'; saveDB(); refreshAdmLists(); toast("APROVADO!"); }
+    function iniciarInscricao(evtId, evtName, val) { if(!loggedUser) return toast("FAÇA LOGIN PRIMEIRO"); if(loggedUser.inscricoes.some(i => i.id == evtId)) return toast("JÁ INSCRITO"); currentPayId = { id: parseInt(evtId), name: evtName }; document.getElementById('pix-valor-display').innerText = val ? `R$ ${val}` : "R$ 100,00"; document.getElementById('pix-copy').innerText = "00020126360014BR.GOV.BCB.PIX0114+55819000000005204000053039865802BR5925FPC FEDERACAO PE CICLISMO6006RECIFE62070503***6304E2CA"; document.getElementById('modal-pix').style.display='flex'; }
+    function enviarComprovanteWhatsApp() { window.open(`https://wa.me/?text=Olá, segue comprovante de inscrição para: ${currentPayId.name} - Piloto: ${loggedUser.nome}`, '_blank'); }
+    function confirmarJaPaguei() { if(!loggedUser.inscricoes.some(i => i.id == currentPayId.id)) { loggedUser.inscricoes.push({ id: currentPayId.id, status: 'PENDENTE' }); const idx = db.users.findIndex(x => x.cpf === loggedUser.cpf); if(idx > -1) db.users[idx].inscricoes = loggedUser.inscricoes; saveDB(); localStorage.setItem(SESS_KEY, JSON.stringify(loggedUser)); } fecharModal('modal-pix'); toast("REGISTRADO!"); renderContent('calendar'); }
     function verCartaz(id) { const evt = db.events.find(e => e.id == id); if(evt && evt.img) { document.getElementById('img-poster-view').src = evt.img; document.getElementById('modal-poster').style.display = 'flex'; } }
     function fecharModal(id){ document.getElementById(id).style.display='none'; }
     function delItem(col, idx) { if(confirm("APAGAR?")) { db[col].splice(idx, 1); saveDB(); refreshAdmLists(); } }
     function maskTimeOrPoints(i) { if(document.getElementById('adm-res-type').value === 'ranking') return; let v = i.value.replace(/\D/g, ""); if (v.length > 7) v = v.substring(0, 7); if (v.length >= 2) v = v.substring(0, 2) + ":" + v.substring(2); if (v.length >= 5) v = v.substring(0, 5) + "." + v.substring(5); i.value = v; }
     function copiarPix() { navigator.clipboard.writeText(document.getElementById('pix-copy').innerText); toast("PIX COPIADO!"); }
-    function abrirComprovante(nomeEvt) { document.getElementById('tk-nome').innerText = loggedUser.nome; document.getElementById('tk-evento').innerText = nomeEvt; document.getElementById('area-cupom-visual').innerHTML = `<div style="text-align:center;padding:20px;font-family:monospace"><h2>DH-PE TICKET</h2><p>PILOTO: ${loggedUser.nome}</p><p>EVENTO: ${nomeEvt}</p><p>DATA: ${new Date().toLocaleString()}</p></div>`; document.getElementById('modal-ticket').style.display = 'flex'; }
     function imprimirTicket() { document.body.classList.add('printing-cupom'); setTimeout(() => { window.print(); setTimeout(() => document.body.classList.remove('printing-cupom'), 1000); }, 500); }
 
     function fazerLogin() { 
@@ -943,61 +828,24 @@
                 loggedUser = user; localStorage.setItem(SESS_KEY, JSON.stringify(user)); 
                 if(remember) localStorage.setItem(REMEMBER_KEY, cpfRaw + "|" + pass); 
                 initApp(); 
-                
-                if(user.role === 'ADMIN' || user.role === 'ORGANIZER') nav('adm');
-                else nav('calendar');
-
+                if(user.role === 'ADMIN' || user.role === 'ORGANIZER') nav('adm'); else nav('calendar');
             } else { toast("DADOS INCORRETOS"); }
         } catch(e) { console.log(e); }
     }
     
     function fazerLogout() { localStorage.removeItem(SESS_KEY); window.location.reload(true); }
-    function nuclearReset() { if(confirm("RESETAR TUDO?")) { localStorage.clear(); location.reload(); } }
-    
-    function cadastrar() { 
-        const u = { 
-            nome: document.getElementById('cad-nome').value.toUpperCase(), 
-            cpf: document.getElementById('cad-cpf').value, 
-            tel: document.getElementById('cad-tel').value, 
-            city: document.getElementById('cad-city').value.toUpperCase(), 
-            pass: document.getElementById('cad-pass').value, 
-            cat: document.getElementById('cad-cat').value, 
-            gender: document.getElementById('cad-gender').value,
-            role: 'USER', inscricoes: [] 
-        };
-        if(!u.nome || !u.cpf || !u.pass) return toast("PREENCHA TUDO");
-        if(db.users.some(x => cleanCPF(x.cpf) === cleanCPF(u.cpf))) return toast("CPF JÁ EXISTE");
-        db.users.push(u); saveDB(); toast("SUCESSO!"); trocarTela('login');
-    }
-    
-    function reCalcCat() {
-        const gender = document.getElementById('cad-gender').value;
-        const date = document.getElementById('cad-nasc').value;
-        calcCat(date, gender);
-    }
-
-    function calcCat(dateStr, gender) {
-        if(gender === 'F') {
-             document.getElementById('cad-cat').value = "FEMININA";
-             return;
-        }
-
-        if(!dateStr) return; 
-        const age = 2026 - new Date(dateStr).getFullYear(); 
-        let cat = "RÍGIDA"; 
-        if (age >= 12 && age <= 14) cat = "INFANTO-JUVENIL"; else if (age >= 15 && age <= 16) cat = "JUVENIL"; else if (age >= 17 && age <= 18) cat = "JUNIOR"; else if (age >= 19 && age <= 29) cat = "SUB-30 / ELITE"; else if (age >= 30 && age <= 34) cat = "MASTER A1"; else if (age >= 35 && age <= 39) cat = "MASTER A2"; else if (age >= 40 && age <= 44) cat = "MASTER B1"; else if (age >= 45 && age <= 49) cat = "MASTER B2"; else if (age >= 50 && age <= 54) cat = "MASTER C1"; else if (age >= 55 && age <= 59) cat = "MASTER C2"; else if (age >= 60) cat = "MASTER D";
-        document.getElementById('cad-cat').value = cat + ` (${age} ANOS)`;
-    }
+    function closeModal(id) { document.getElementById(id).style.display='none'; }
+    function cadastrar() { const u = { nome: document.getElementById('cad-nome').value.toUpperCase(), cpf: document.getElementById('cad-cpf').value, tel: document.getElementById('cad-tel').value, city: document.getElementById('cad-city').value.toUpperCase(), pass: document.getElementById('cad-pass').value, cat: document.getElementById('cad-cat').value, gender: document.getElementById('cad-gender').value, role: 'USER', inscricoes: [] }; if(!u.nome || !u.cpf || !u.pass) return toast("PREENCHA TUDO"); if(db.users.some(x => cleanCPF(x.cpf) === cleanCPF(u.cpf))) return toast("CPF JÁ EXISTE"); db.users.push(u); saveDB(); toast("SUCESSO!"); trocarTela('login'); }
+    function reCalcCat() { const gender = document.getElementById('cad-gender').value; const date = document.getElementById('cad-nasc').value; calcCat(date, gender); }
+    function calcCat(dateStr, gender) { if(gender === 'F') { document.getElementById('cad-cat').value = "FEMININA"; return; } if(!dateStr) return; const age = 2026 - new Date(dateStr).getFullYear(); let cat = "RÍGIDA"; if (age >= 12 && age <= 14) cat = "INFANTO-JUVENIL"; else if (age >= 15 && age <= 16) cat = "JUVENIL"; else if (age >= 17 && age <= 18) cat = "JUNIOR"; else if (age >= 19 && age <= 29) cat = "SUB-30 / ELITE"; else if (age >= 30 && age <= 34) cat = "MASTER A1"; else if (age >= 35 && age <= 39) cat = "MASTER A2"; else if (age >= 40 && age <= 44) cat = "MASTER B1"; else if (age >= 45 && age <= 49) cat = "MASTER B2"; else if (age >= 50 && age <= 54) cat = "MASTER C1"; else if (age >= 55 && age <= 59) cat = "MASTER C2"; else if (age >= 60) cat = "MASTER D"; document.getElementById('cad-cat').value = cat + ` (${age} ANOS)`; }
 
     function initApp() { 
         if(db.config.logo) document.querySelectorAll('.app-logo-img').forEach(el => el.src = db.config.logo);
         renderStories(); trocarTela('app'); 
-        if(loggedUser && (loggedUser.role === 'ADMIN' || loggedUser.role === 'ORGANIZER')) nav('adm');
-        else nav('calendar');
+        if(loggedUser && (loggedUser.role === 'ADMIN' || loggedUser.role === 'ORGANIZER')) nav('adm'); else nav('calendar');
     }
 
     document.getElementById('btn-acessar').addEventListener('click', fazerLogin);
-
     const savedCreds = localStorage.getItem(REMEMBER_KEY); const session = getUser();
     if(session) { loggedUser = db.users.find(u => cleanCPF(u.cpf) === cleanCPF(session.cpf)); if(loggedUser) initApp(); } 
     else if (savedCreds) { const p = savedCreds.split('|'); document.getElementById('login-cpf').value = p[0]; document.getElementById('login-pass').value = p[1]; document.getElementById('login-remember').checked = true; }
